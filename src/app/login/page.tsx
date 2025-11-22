@@ -1,29 +1,12 @@
 'use client'
-
-import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
-const API = 'http://localhost:3001'
-
-async function sendEmail(email: string) {
-  const res = await fetch(`${API}/auth/email/start`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
-  })
-
-  const data = await res.json()
-  if (!res.ok || !data?.ok) {
-    throw new Error(data?.message || data?.error || '이메일 전송 실패')
-  }
-
-  return data.message || '인증 코드가 이메일로 전송됐어요.'
-}
-
+import { useState } from 'react'
+import { sendEmail } from '@/src/apis/auth.email'
 export default function EmailPage() {
   const [email, setEmail] = useState('')
 
-  // ✅ useMutation 사용
+  // useMutation 사용
   const { mutate, isPending, isSuccess, isError, error, data } = useMutation({
     mutationFn: sendEmail,
   })
