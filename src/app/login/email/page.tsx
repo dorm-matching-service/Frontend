@@ -3,36 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
+import { verifyEmail } from '@/src/apis/auth.email'
 
-const API = 'http://localhost:3001'
-
-async function verifyEmail({
-  email,
-  code,
-  name,
-}: {
-  email: string
-  code: string
-  name: string
-}) {
-  const res = await fetch(`${API}/auth/email/verify`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, code, name }),
-  })
-
-  const data = await res.json()
-  if (!res.ok || !data?.ok) {
-    throw new Error(data?.message || data?.error || '인증 실패')
-  }
-
-  // 로그인 성공 시 토큰 저장
-  if (data.token) {
-    localStorage.setItem('knock_token', data.token)
-  }
-
-  return data.message || '로그인 성공!'
-}
 
 export default function VerifyPage() {
   const router = useRouter()
@@ -42,7 +14,7 @@ export default function VerifyPage() {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
 
-  // ✅ useMutation으로 인증 처리
+  // useMutation으로 인증 처리
   const {
     mutate,
     isPending,
