@@ -16,8 +16,8 @@ export default function EmailPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow">
-        <h1 className="mb-6 text-xl font-semibold text-red-500">이메일로 인증코드 받기</h1>
+      <div className="w-full max-w-md rounded-2xl  p-6 shadow">
+        <h1 className="mt-8 text-xl font-semibold text-cyan-300">이메일로 인증코드 받기</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <label className="text-sm text-gray-700">이메일</label>
