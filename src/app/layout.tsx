@@ -1,7 +1,5 @@
 import "./globals.css";
 import Providers from "./provider";
-import Header from "./components/ui/Header";
-import Footer from "./components/ui/Footer";
 
 export default function RootLayout({
   children,
@@ -10,12 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Providers>
-          <Header />
-          <main className="min-h-screen"> {children} </main>
-          <Footer />
-        </Providers>
+      <body
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
