@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start --webpack"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
     "@tanstack/react-query-devtools": "^5.90.2",
+    "i": "^0.3.7",
     "next": "16.0.1",
+    "nvm": "^0.0.4",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
