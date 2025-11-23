@@ -1,39 +1,36 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
-import { verifyEmail } from '@/src/apis/auth.email'
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import useEmailVerify from "@/src/hooks/auth/useEmailVerify";
 
 export default function VerifyPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   // 입력값은 useState로 유지 (UI 상태)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [code, setCode] = useState('')
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
 
   // useMutation으로 인증 처리
-  const {
-    mutate,
-    isPending,
-    isSuccess,
-    isError,
-    data,
-    error,
-  } = useMutation({
-    mutationFn: verifyEmail,
-    onSuccess: () => {
-      // 인증 성공 시 메인 페이지로 이동
-      router.push('/')
-    },
-  })
+  const { mutate, isPending, isError, isSuccess, data, error } = useEmailVerify();
+
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    mutate({ email, code, name }) // 요청 실행
-  }
+    e.preventDefault();
+    mutate(
+      { email, code, name },
+      {
+        onSuccess: (data) => {
+          if (data.token) {
+            localStorage.setItem("knock_token", data.token);
+          }
+          // 인증 성공 시 메인 페이지로 이동
+          router.push("/");
+        },
+      }
+    ); // 요청 실행
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -78,26 +75,24 @@ export default function VerifyPage() {
             disabled={isPending}
             className="mt-2 rounded bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 disabled:opacity-60"
           >
-            {isPending ? '검증 중…' : '로그인'}
+            {isPending ? "검증 중…" : "로그인"}
           </button>
         </form>
 
-        {isSuccess && (
-          <p className="mt-4 text-sm text-green-700">{data}</p>
-        )}
+        {isSuccess && <p className="mt-4 text-sm text-green-700">{data}</p>}
         {isError && (
           <p className="mt-2 text-sm text-red-600">
-            {(error as Error).message ?? '요청 실패'}
+            {(error as Error).message ?? "요청 실패"}
           </p>
         )}
 
         <p className="mt-6 text-sm text-gray-600">
-          코드를 못 받았나요?{' '}
+          코드를 못 받았나요?{" "}
           <a href="/email" className="text-blue-600 hover:underline">
             여기에서 코드 받기
           </a>
         </p>
       </div>
     </main>
-  )
+  );
 }
