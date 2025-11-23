@@ -1,15 +1,13 @@
 'use client'
-import { useMutation } from '@tanstack/react-query'
 
+import useEmailStart from '@/src/hooks/auth/useEmailStart';
 import { useState } from 'react'
-import { sendEmail } from '@/src/apis/auth.email'
+
 export default function EmailPage() {
   const [email, setEmail] = useState('')
 
-  // useMutation 사용
-  const { mutate, isPending, isSuccess, isError, error, data } = useMutation({
-    mutationFn: sendEmail,
-  })
+  const {mutate, isPending, isError, isSuccess, data, error} = useEmailStart();
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

@@ -1,1 +1,9 @@
-//이메일 인증 코드 보내는 useMutation로직과 인증 성공시 팝업에 띄울 메세지 포함
+import React from "react";
+import { useMutation } from "@tanstack/react-query";
+
+import { sendEmail } from "@/src/apis/auth.email";
+export default function useEmailStart() {
+  return useMutation({
+    mutationFn: sendEmail,
+  });
+};
