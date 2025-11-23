@@ -1,4 +1,8 @@
 module.exports = {
+  content: [
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -8,4 +12,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};
