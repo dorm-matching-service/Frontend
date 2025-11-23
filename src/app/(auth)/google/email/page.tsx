@@ -19,13 +19,15 @@ export default function EmailPage() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-white ">
 
-       <p className="text-gray-900 font-bold">
+       <p className="text-gray-900 font-bold  text-center mb-6 text-32">
           Knock서비스 이용을 위해 <br />
           이메일 인증 한번이 필요해요
         </p>
       <Box>
        
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <p className="self-start text-gray-900 font-bold text-24">인증 코드 입력</p>
+          <p className="self-start">제공해주신 이메일 주소로 인증 코드를 보내드렸습니다.</p>
           <label className="text-sm text-gray-700">이메일</label>
           <input
             type="email"

@@ -10,7 +10,7 @@ export default function Box({
   className?: string;
 }) {
   return (
-    <div className={clsx("w-full max-w-md rounded-2xl p-6 shadow-custom", className)}>
+    <div className={clsx("w-full max-w-md rounded-2xl p-6 shadow-card", className)}>
 
       {children}
     </div>
