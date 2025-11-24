@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-export default function Box({
+export default function AuthBox({
   children,
   className,
 
@@ -10,7 +10,7 @@ export default function Box({
   className?: string;
 }) {
   return (
-    <div className={clsx("w-full max-w-md rounded-2xl p-6 shadow-card", className)}>
+    <div className={clsx("min-w-[376.025px] min-h-[330px] rounded-[15px] p-6 shadow-card", className)}>
 
       {children}
     </div>

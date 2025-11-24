@@ -1,98 +1,134 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 import useEmailVerify from "@/src/hooks/auth/useEmailVerify";
+import { useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+
+import AuthButton from "../../../_components/AuthButton";
+import AuthInput from "../../../_components/AuthInput";
+import AuthBox from "../../../_components/AuthBox";
+import AuthPopup from "../../../_components/AuthPopup";
+
+interface VerifyForm {
+  code: string;
+}
 
 export default function VerifyPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const expiresAt = searchParams.get("expiresAt");
+  const [timeLeft, setTimeLeft] = useState("");
 
-  // 입력값은 useState로 유지 (UI 상태)
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+  const email = searchParams.get("email") || "";
+
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<VerifyForm>();
 
   // useMutation으로 인증 처리
-  const { mutate, isPending, isError, isSuccess, data, error } = useEmailVerify();
+  const { mutate, isPending, isError, isSuccess, data, error } =
+    useEmailVerify();
+
+  useEffect(() => {
+    if (!expiresAt) return;
+
+    const timer = setInterval(() => {
+      //diff는 만료시간 - 현재 시간 => 얼마나 시간이 남았는지 체크
+      const diff = new Date(expiresAt).getTime() - Date.now();
+
+      if (diff <= 0) {
+        setTimeLeft("만료됨");
+        clearInterval(timer);
+        return;
+      }
+      
+
+      //1000으로 나눠서 밀리초로 변환
+      const min = Math.floor(diff / 1000 / 60);
+      const sec = Math.floor((diff / 1000) % 60);
 
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+      //.padStart(2, "0") → 앞에 0을 붙여서 2자리로 만들기 padStart(길이, 채울문자)
+      //초가 0~9이면 앞에 0을 붙여서 두 자리로 만들어줌.
+      const formatted = `${min}:${sec.toString().padStart(2, "0")}`;
+      setTimeLeft(formatted);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [expiresAt]);
+
+  const onValid = ({ code }: VerifyForm) => {
     mutate(
-      { email, code, name },
+      { email, code },
       {
-        onSuccess: (data) => {
-          if (data.token) {
-            localStorage.setItem("knock_token", data.token);
-          }
-          // 인증 성공 시 메인 페이지로 이동
-          router.push("/");
+        onSuccess: (res) => {
+          router.push(`/email/consent?email=${email}`);
+        },
+        onError: () => {
+          setPopupMessage("인증 코드가 올바르지 않습니다.");
         },
       }
-    ); // 요청 실행
+    );
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow">
-        <h1 className="mb-6 text-xl font-semibold">인증 코드 확인</h1>
+    <main className="flex flex-col min-h-screen items-center justify-center bg-white">
+      <p className="text-gray-900 font-bold text-center mb-6 text-32">
+        Knock에서 이메일로 받은 <br /> 인증 코드를 입력해주세요
+      </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label className="text-sm text-gray-700">이름</label>
-          <input
+      <AuthBox>
+        <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-3">
+          <p className="self-start text-gray-900 font-bold text-24">
+            인증 코드 입력
+          </p>
+
+          <p className="self-start text-gray-600 text-16">
+            인증 코드를 입력해주세요
+          </p>
+
+          <AuthInput
+            rightAddon={timeLeft}
             type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="홍길동"
-            className="w-full rounded border border-gray-300 px-4 py-2"
-          />
-
-          <label className="text-sm text-gray-700">이메일</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="w-full rounded border border-gray-300 px-4 py-2"
-          />
-
-          <label className="text-sm text-gray-700">인증 코드</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            required
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
             placeholder="6자리 코드"
-            className="w-full rounded border border-gray-300 px-4 py-2 tracking-widest"
+            {...register("code", {
+              required: "코드를 입력해주세요.",
+              pattern: {
+                value: /^[0-9]{6}$/,
+                message: "올바른 숫자 코드를 입력해주세요.",
+              },
+            })}
           />
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className="mt-2 rounded bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 disabled:opacity-60"
-          >
-            {isPending ? "검증 중…" : "로그인"}
-          </button>
+          <p className="h-5 text-accent text-16 ml-1 min-h-[20px]">
+            {errors.code?.message || ""}
+          </p>
+
+          <AuthButton type="submit" disabled={isPending}>
+            {isPending ? "확인 중…" : "코드 확인"}
+          </AuthButton>
         </form>
 
-        {isSuccess && <p className="mt-4 text-sm text-green-700">{data}</p>}
-        {isError && (
-          <p className="mt-2 text-sm text-red-600">
-            {(error as Error).message ?? "요청 실패"}
-          </p>
-        )}
-
         <p className="mt-6 text-sm text-gray-600">
-          코드를 못 받았나요?{" "}
-          <a href="/email" className="text-blue-600 hover:underline">
-            여기에서 코드 받기
+          코드가 안 오나요?{" "}
+          <a href="/google/email" className="text-main hover:underline">
+            다시 요청하기
           </a>
         </p>
-      </div>
+
+        {popupMessage && (
+          <AuthPopup
+            message={popupMessage}
+            onClose={() => setPopupMessage(null)}
+          />
+        )}
+      </AuthBox>
     </main>
   );
 }
