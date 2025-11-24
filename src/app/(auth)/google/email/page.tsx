@@ -1,67 +1,131 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 
 import useEmailStart from "@/src/hooks/auth/useEmailStart";
 import { useState } from "react";
-import Box from "@/src/components/ui/Box";
+import { useForm } from "react-hook-form";
+import AuthBox from "@/src/app/(auth)/_components/AuthBox";
+import AuthInput from "../../_components/AuthInput";
+import AuthButton from "../../_components/AuthButton";
+import AuthPopup from "../../_components/AuthPopup";
+import { useRouter } from "next/navigation";
+
+interface EmailForm {
+  email: string;
+}
 
 export default function EmailPage() {
-  const [email, setEmail] = useState("");
+  const router = useRouter();
 
-  const { mutate, isPending, isError, isSuccess, data, error } =
-    useEmailStart();
+  //팝업 메세지 관리 state 없거나 즉 null이거나 string 값이다
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate(email); // 이메일 전송 요청 실행
+  //성공/실패 구분 상태 추가
+  const [popupType, setPopupType] = useState<"success" | "error" | null>(null);
+
+  //성공 시 보낼 이메일 저장하는 state
+  const [sentEmail, setSentEmail] = useState<string | null>(null);
+
+  const [expiresAt, setExpirseAt] = useState<string | null>(null);
+
+ 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EmailForm>({
+    mode: "onChange", //입력 즉시 유효성 검사
+  });
+
+  const { mutate, isPending, isError, isSuccess, data, error } = useEmailStart({
+    //사용자가 볼 성공 에러 문자
+    //onSuccess: (data, variables, context) => {} 이므로 두 번째 파라미터인 variables 만 사용하기 위함
+    onSuccess: (data, variable) => {
+      setSentEmail(variable.email);// 이메일 저장
+      setExpirseAt(data.expiresAt);
+      setPopupType("success");//인증 성공 표시
+      setPopupMessage("인증 코드가 이메일로 전송되었습니다");
+    },
+    onError: () => {
+      setPopupType("error"); // 인증 실패 표시
+      setPopupMessage("요청 중 오류가 발생했습니다.");
+    },
+  });
+
+   const handlePopupClose = () => {
+    setPopupMessage(null);
+
+    // 성공 팝업일 때만 이동하게 함
+    if (popupType === "success" && sentEmail) {
+      router.push(`/google/email/verify?email=${sentEmail}&expiresAt=${expiresAt}`);
+    }
+
+    // popupType 초기화
+    setPopupType(null);
+  };
+
+  // 개발자가 봐야하는 성공 에러 문자
+  if (isSuccess) {
+    console.log("성공:", data);
+  }
+
+  if (isError) {
+    console.log("에러:", error?.message || "요청 실패");
+  }
+  const onValid = (data: EmailForm) => {
+    mutate(data.email); // data.email이 실제 입력된 값
   };
 
   return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-white ">
-
-       <p className="text-gray-900 font-bold  text-center mb-6 text-32">
-          Knock서비스 이용을 위해 <br />
-          이메일 인증 한번이 필요해요
-        </p>
-      <Box>
-       
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <p className="self-start text-gray-900 font-bold text-24">인증 코드 입력</p>
-          <p className="self-start">제공해주신 이메일 주소로 인증 코드를 보내드렸습니다.</p>
-          <label className="text-sm text-gray-700">이메일</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="w-full rounded border border-gray-300 px-4 py-2"
-          />
-
-          <button
-            type="submit"
-            disabled={isPending}
-            className="rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-          >
-            {isPending ? "전송 중…" : "인증 코드 받기"}
-          </button>
-        </form>
-
-        {/* ✅ 상태별 UI */}
-        {isSuccess && <p className="mt-4 text-sm text-green-700">{data}</p>}
-        {isError && (
-          <p className="mt-2 text-sm text-red-600">
-            {(error as Error).message ?? "요청 실패"}
+      <p className="text-gray-900 font-bold  text-center mb-6 text-32">
+        Knock서비스 이용을 위해 <br />
+        이메일 인증이 필요해요
+      </p>
+      <AuthBox>
+        <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-3">
+          <p className="self-start text-gray-900 font-bold text-24">
+            학교 이메일 입력
           </p>
-        )}
+          <p className="self-start text-gray-600 text-16">
+            올바른 양식에 맞춰 학교 이메일을 입력해주세요
+          </p>
+          <AuthInput
+            type="email"
+            placeholder="you@bu.ac.kr"
+            {...register("email", {
+              required: "이메일을 입력해주세요.",
+              pattern: {
+                value: /^[A-Za-z0-9._%+-]+@bu\.ac\.kr$/,
+                message: "올바른 이메일 형식이 아닙니다.",
+              },
+            })}
+          ></AuthInput>
+          <p className="h-5 text-accent text-16 ml-1 min-h-[20px]">
+            {errors.email?.message || ""}
+          </p>
+
+          <AuthButton type="submit" disabled={isPending}>
+            {isPending ? "전송 중…" : "인증 코드 받기"}
+          </AuthButton>
+        </form>
 
         <p className="mt-6 text-sm text-gray-600">
           이미 코드를 받았다면{" "}
-          <a href="/email/verify" className="text-blue-600 hover:underline">
+          <a href="/google/email/verify" className="text-main hover:underline">
             여기에서 인증하기
           </a>
         </p>
-      </Box>
+
+        {/* 사용자 요청 성공 실패 팝업 창 */}
+        {popupMessage && (
+          <AuthPopup
+            message={popupMessage}
+            onClose={handlePopupClose}
+          />
+        )}
+      </AuthBox>
     </main>
   );
 }

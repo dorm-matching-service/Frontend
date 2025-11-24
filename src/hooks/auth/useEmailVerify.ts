@@ -1,11 +1,39 @@
-//인증시 useMutation로직과 토큰 저장 로직 및 로그인 성공 팝업 로직 작성 예정
 import { useMutation } from '@tanstack/react-query'
-
 import { verifyEmail } from '@/src/apis/auth.email'
 
-export default function useEmailVerify() {
- return useMutation({
+interface VerifyEmailResponse {
+  ok: boolean;
+  message: string;
+  email: string;
+}
+
+interface VerifyEmailVariables {
+  email: string;
+  code: string;
+}
+
+interface  EmailVerifyOptions {
+  onSuccess?: (
+    data: VerifyEmailResponse,
+    variables: VerifyEmailVariables
+  ) => void;
+  onError?: (error: Error)=> void
+  
+}
+
+export default function useEmailVerify(options?: EmailVerifyOptions) {
+  // useMutation 제네릭 타입 순서 Data, Error, Variables, Context(옵션) 순
+
+ return useMutation<VerifyEmailResponse, Error, VerifyEmailVariables>({
      mutationFn: verifyEmail,
+
+     onSuccess: (data, variables) => {
+      options?.onSuccess?.(data, variables);
+     },
+
+     onError: (error) => {
+      options?.onError?.(error);
+     }
    });
 }
 
