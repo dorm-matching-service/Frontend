@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import AuthBox from "@/src/app/(auth)/_components/AuthBox";
 import AuthInput from "../../_components/AuthInput";
-import AuthButton from "../../_components/AuthButton";
+import AuthButton from "../../../../components/ui/Button";
 import AuthPopup from "../../_components/AuthPopup";
 import { useRouter } from "next/navigation";
 

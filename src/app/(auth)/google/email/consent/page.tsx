@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 
 import AuthBox from "../../../_components/AuthBox";
-import AuthButton from "../../../_components/AuthButton";
+import AuthButton from "../../../../../components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
