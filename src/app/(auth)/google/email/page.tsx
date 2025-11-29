@@ -78,7 +78,7 @@ export default function EmailPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center bg-white ">
+    <div className="flex flex-col">
       <p className="text-gray-900 font-bold  text-center mb-6 text-32">
         Knock서비스 이용을 위해 <br />
         이메일 인증이 필요해요
@@ -126,6 +126,6 @@ export default function EmailPage() {
           />
         )}
       </AuthBox>
-    </main>
+    </div>
   );
 }
