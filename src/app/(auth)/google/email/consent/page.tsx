@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import AuthBox from "../../../_components/AuthBox";
 import AuthButton from "../../../_components/AuthButton";
