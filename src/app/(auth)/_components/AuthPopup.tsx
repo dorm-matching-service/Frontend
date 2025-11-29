@@ -1,4 +1,4 @@
-import AuthButton from './AuthButton';
+import AuthButton from '../../../components/ui/Button';
 
 interface AuthPopupProps {
   message: string;

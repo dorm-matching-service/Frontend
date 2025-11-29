@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 export default function Footer() {
     return (
-        <footer className=" w-full bg-[#F2F2F2]">
-            <div className="mx-auto max-w-[1280px] px-10 py-10 text-center text-[#1B1B1B]">
+        <footer className=" w-full bg-gray-100">
+            <div className="mx-auto max-w-[1280px] px-10 py-10 text-center text-gray-900">
                 <div className="mb-4 flex justify-center">
                     <img src="/knockblack.svg" alt="Knock 로고" className="h-5 w-auto"  />
                 </div>

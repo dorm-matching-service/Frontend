@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter", // css 변수로 등록 (선택)
+  variable: "--font-inter", 
 });
 
 export default function RootLayout({

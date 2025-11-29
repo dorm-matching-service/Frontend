@@ -7,7 +7,7 @@ import useEmailVerify from "@/src/hooks/auth/useEmailVerify";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
-import AuthButton from "../../../_components/AuthButton";
+import AuthButton from "../../../../../components/ui/Button";
 import AuthInput from "../../../_components/AuthInput";
 import AuthBox from "../../../_components/AuthBox";
 import AuthPopup from "../../../_components/AuthPopup";
