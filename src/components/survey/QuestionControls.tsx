@@ -104,12 +104,12 @@ type TextAreaWithPreviewProps = {
     maxLength?: number;
 };
 
-export function TextAreaWithPreview({ value, onChange, maxLength = 60 }: TextAreaWithPreviewProps) {
+export function TextAreaWithPreview({ value, onChange, maxLength = 150 }: TextAreaWithPreviewProps) {
     const length = value.length;
 
     return (
-        <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-            <div className="space-y-2">
+        <div className="grid gap-4">
+            <div className="space-y-1">
                 <textarea
                     value={value}
                     onChange={(e) => {
@@ -118,23 +118,27 @@ export function TextAreaWithPreview({ value, onChange, maxLength = 60 }: TextAre
                     }}
                     rows={4}
                     placeholder="예) 하루에 한 끼는 같이 먹어요."
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#4CB7A5]"
+                    className="
+                        w-full
+                        rounded-xl
+                        border 
+                        border-gray-300
+                        bg-white
+                        px-4 py-3
+                        text-sm
+                        outline-none
+                        focus:border-[#4CB7A5]
+                        focus:ring-1
+                        focus:ring-[#4CB7A5]
+                        transition
+                    "
                 />
                 <div className="flex justify-end text-xs text-gray-400">
                     {length}/{maxLength}
                 </div>
             </div>
-            <div className="space-y-3">
-                <div className="rounded-2xl border border-gray-200 bg-white p-3 text-xs text-gray-500">
-                    예) 하루에 한 끼는 같이 먹어요.
-                </div>
-                <div className="rounded-2xl border border-gray-200 bg-white p-3 text-xs text-gray-700">
-                    {value || '텍스트를 작성하면 이렇게 보입니다.'}
-                </div>
-                {value && (
-                    <div className="rounded-2xl border border-red-300 bg-red-50 p-3 text-xs text-red-500">{value}</div>
-                )}
-            </div>
+
+            <p className="text-[11px] text-red-500">* 상대방이 보기 때문에 신중하게 작성해주세요.</p>
         </div>
     );
 }
@@ -198,7 +202,7 @@ export function TagInput({ tags, onChange, maxTags = 5 }: TagInputProps) {
                 </div>
             )}
             <p className="text-xs text-gray-400">
-                태그 {tags.length}/{maxTags}개 · 클릭하면 삭제됩니다.
+                태그 {tags.length}/{maxTags}개 
             </p>
         </div>
     );

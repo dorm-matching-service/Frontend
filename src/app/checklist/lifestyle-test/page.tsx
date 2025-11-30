@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { StepTabs } from '../../../components/survey/StepTabs';
-import { RadioGroup, CheckboxGroup, TextAreaWithPreview, TagInput } from '../../../components/survey/QuestionControls';
+import { CheckboxGroup, TextAreaWithPreview, TagInput } from '../../../components/survey/QuestionControls';
 
 const STEPS = [
     '기본정보 4문항',
@@ -12,6 +12,8 @@ const STEPS = [
     '취미여가 4문항',
     '룸메기대 1문항',
 ];
+
+type Phase = 'form' | 'selfTag' | 'complete';
 
 type BasicInfo = {
     age: string;
@@ -48,7 +50,6 @@ function CircleOption({ label, selected, onClick }: CircleOptionProps) {
     );
 }
 
-/** 예/아니요 토글 스위치 */
 type ToggleYesNoProps = {
     label: string;
     value: string;
@@ -84,6 +85,7 @@ function ToggleYesNo({ label, value, onChange }: ToggleYesNoProps) {
 }
 
 export default function LifestyleTestPage() {
+    const [phase, setPhase] = React.useState<Phase>('form');
     const [currentStep, setCurrentStep] = React.useState(0);
 
     const [basicInfo, setBasicInfo] = React.useState<BasicInfo>({
@@ -108,9 +110,9 @@ export default function LifestyleTestPage() {
         hot: '',
     });
     const [outgoingFreq, setOutgoingFreq] = React.useState(''); // 본가 방문 빈도
-    const [mealStyle, setMealStyle] = React.useState(''); // 식사 장소(기숙사 안/밖)
     const [mealPlace, setMealPlace] = React.useState(''); // 식사 장소 선택
     const [mealNote, setMealNote] = React.useState(''); // 직접 입력 메모
+    const isMealAnswered = mealPlace !== '' || mealNote.trim().length > 0;
 
     // Step 4
     const [gamingTime, setGamingTime] = React.useState('');
@@ -123,9 +125,10 @@ export default function LifestyleTestPage() {
 
     // 마지막 self tag
     const [selfTags, setSelfTags] = React.useState<string[]>([]);
-    const [finished, setFinished] = React.useState(false);
 
     const canGoNext = () => {
+        if (phase !== 'form') return false;
+
         switch (currentStep) {
             case 0:
                 return (
@@ -145,7 +148,7 @@ export default function LifestyleTestPage() {
                     temperaturePref.cold !== '' &&
                     temperaturePref.hot !== '' &&
                     outgoingFreq !== '' &&
-                    mealStyle !== ''
+                    isMealAnswered
                 );
             case 4:
                 return gamingTime !== '' && drinkFreq !== '' && homeStyle.length > 0 && hobbies.length > 0;
@@ -157,49 +160,63 @@ export default function LifestyleTestPage() {
     };
 
     const handleNext = () => {
+        if (phase !== 'form') return;
+
         if (currentStep === STEPS.length - 1) {
-            setFinished(true);
-            console.log('제출 데이터:', {
-                basicInfo,
-                wakeTime,
-                sleepTime,
-                showerFreq,
-                cleaningFreq,
-                activityLevel,
-                roomTraits,
-                temperaturePref,
-                outgoingFreq,
-                mealStyle,
-                mealPlace,
-                mealNote,
-                gamingTime,
-                drinkFreq,
-                homeStyle,
-                hobbies,
-                roommateWish,
-                selfTags,
-            });
+            // 모든 문항 작성 끝 → 태그 입력 페이지로 이동
+            setPhase('selfTag');
             return;
         }
         setCurrentStep((prev) => prev + 1);
     };
 
     const handlePrev = () => {
-        if (currentStep === 0) return;
-        setCurrentStep((prev) => prev - 1);
+        if (phase === 'form') {
+            if (currentStep === 0) return;
+            setCurrentStep((prev) => prev - 1);
+        } else if (phase === 'selfTag') {
+            // 태그 페이지에서 '이전' 누르면 마지막 스텝으로 돌아가기
+            setPhase('form');
+            setCurrentStep(STEPS.length - 1);
+        }
     };
 
-    if (finished) {
+    const handleSubmitAll = () => {
+        if (selfTags.length < 5) return;
+
+        setPhase('complete');
+
+        console.log('제출 데이터:', {
+            basicInfo,
+            wakeTime,
+            sleepTime,
+            showerFreq,
+            cleaningFreq,
+            activityLevel,
+            roomTraits,
+            temperaturePref,
+            outgoingFreq,
+            mealPlace,
+            mealNote,
+            gamingTime,
+            drinkFreq,
+            homeStyle,
+            hobbies,
+            roommateWish,
+            selfTags,
+        });
+    };
+
+    if (phase === 'selfTag') {
         const canFinishMatching = selfTags.length >= 5;
 
         return (
-            <div className="mx-auto ">
+            <div className="mx-auto px-4 py-10">
                 <StepTabs steps={STEPS} currentStep={STEPS.length - 1} />
-                <section className=" bg-white  shadow-sm">
+                <section className="mt-6 rounded-2xl bg-white px-6 py-10 shadow-sm">
                     <p className="mb-2 text-xs font-semibold text-[#4CB7A5]">라이프 스타일 테스트</p>
-                    <h1 className="mb-8 text-2xl font-semibold">당신은 어떤 사람인가요?</h1>
-
-                    <p className="mb-4 text-sm text-gray-600">
+                    <h1 className="mb-2 text-2xl font-semibold">당신은 어떤 사람인가요?</h1>
+                    <p className="mb-6 text-xl text-[#5F5F5F]">
                         룸메이트가 당신을 더 잘 이해할 수 있도록, 나를 표현하는 키워드를 5개 작성해 주세요. (6자 이하)
                     </p>
 
@@ -208,20 +225,20 @@ export default function LifestyleTestPage() {
                     <div className="mt-10 flex justify-between gap-4">
                         <button
                             type="button"
-                            onClick={() => setFinished(false)}
+                            onClick={handlePrev}
                             className="flex-1 rounded-full bg-gray-100 py-3 text-sm font-medium text-gray-500"
                         >
                             이전
                         </button>
                         <button
                             type="button"
+                            onClick={handleSubmitAll}
                             disabled={!canFinishMatching}
-                            className={`flex-1 rounded-full py-3 text-sm font-medium transition 
-                ${
-                    canFinishMatching
-                        ? 'bg-[#4CB7A5] text-white hover:bg-[#3aa594]'
-                        : 'cursor-not-allowed bg-gray-200 text-gray-400'
-                }`}
+                            className={`flex-1 rounded-full py-3 text-sm font-medium transition ${
+                                canFinishMatching
+                                    ? 'bg-[#4CB7A5] text-white hover:bg-[#3aa594]'
+                                    : 'cursor-not-allowed bg-gray-200 text-gray-400'
+                            }`}
                         >
                             완료
                         </button>
@@ -229,22 +246,30 @@ export default function LifestyleTestPage() {
 
                     <p className="mt-3 text-xs text-gray-400">태그 5개를 모두 입력하면 완료 버튼이 활성화됩니다.</p>
                 </section>
+            </div>
+        );
+    }
+
+    if (phase === 'complete') {
+        return (
+            <div className="mx-auto px-4 py-10">
+                <StepTabs steps={STEPS} currentStep={STEPS.length - 1} />
 
                 <section className="mt-6 rounded-2xl bg-white px-6 py-10 shadow-sm">
                     <p className="mb-2 text-xs font-semibold text-[#4CB7A5]">라이프 스타일 테스트</p>
-                    <h2 className="mb-4 text-2xl font-semibold">Knock, 모든 준비가 끝났어요.</h2>
-                    <p className="mb-8 text-gray-600">나와 어울리는 룸메이트를 만나러 가볼까요?</p>
+                    <h2 className="mb-2  text-m ">모든 준비가 끝났어요.</h2>
+                    <p className="mb-8 text-2xl font-bold">나와 어울리는 룸메이트를 만나러 가볼까요?</p>
+
                     <div className="flex justify-center">
                         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#E4F5F1] text-4xl">
                             🔔
                         </div>
                     </div>
-
                     <div className="mt-10 flex justify-center gap-4">
-                        <button className="rounded-full bg-gray-100 px-6 py-3 text-sm font-medium text-gray-400">
+                        <button className="rounded-lg bg-gray-100 px-6 py-3 text-sm font-medium text-gray-400">
                             메인 홈으로 가기
                         </button>
-                        <button className="rounded-full bg-[#4CB7A5] px-6 py-3 text-sm font-medium text-white hover:bg-[#3aa594]">
+                        <button className="rounded-lg bg-[#4CB7A5] px-6 py-3 text-sm font-medium text-white hover:bg-[#3aa594]">
                             지금 바로 매칭 시작
                         </button>
                     </div>
@@ -254,13 +279,11 @@ export default function LifestyleTestPage() {
     }
 
     return (
-        <div className="mx-auto  px-4 py-10">
-            <StepTabs steps={STEPS} currentStep={currentStep} />
-
-            <section className=" bg-white px-6 py-10 shadow-sm">
-                <p className="mb-2 text-xs  text-[#4CB7A5]">라이프 스타일 테스트</p>
+        <div className="mx-auto px-4 py-10">
+            <section className="mt-6 rounded-2xl bg-white px-6 py-10 shadow-sm">
+                <p className="mb-2 text-xs text-[#4CB7A5]">라이프 스타일 테스트</p>
                 <h1 className="mb-2 text-2xl font-semibold text-[#1B1B1B]">당신의 생활 습관에 맞게 선택해 주세요</h1>
-
+                <StepTabs steps={STEPS} currentStep={currentStep} />
                 <div className="mt-8 space-y-10">
                     {currentStep === 0 && <StepBasicInfo basicInfo={basicInfo} setBasicInfo={setBasicInfo} />}
 
@@ -292,8 +315,6 @@ export default function LifestyleTestPage() {
                             setTemperaturePref={setTemperaturePref}
                             outgoingFreq={outgoingFreq}
                             setOutgoingFreq={setOutgoingFreq}
-                            mealStyle={mealStyle}
-                            setMealStyle={setMealStyle}
                             mealPlace={mealPlace}
                             setMealPlace={setMealPlace}
                             mealNote={mealNote}
@@ -317,8 +338,7 @@ export default function LifestyleTestPage() {
                     {currentStep === 5 && (
                         <StepRoommateWish roommateWish={roommateWish} setRoommateWish={setRoommateWish} />
                     )}
-                </div>
-
+                </div>{' '}
                 <div className="mt-10 flex justify-between gap-4">
                     <button
                         type="button"
@@ -336,14 +356,13 @@ export default function LifestyleTestPage() {
                         type="button"
                         onClick={handleNext}
                         disabled={!canGoNext()}
-                        className={`flex-1 rounded-full py-3 text-sm font-medium transition
-              ${
-                  canGoNext()
-                      ? 'bg-[#4CB7A5] text-white hover:bg-[#3aa594]'
-                      : 'cursor-not-allowed bg-gray-200 text-gray-400'
-              }`}
+                        className={`flex-1 rounded-full py-3 text-sm font-medium transition ${
+                            canGoNext()
+                                ? 'bg-[#4CB7A5] text-white hover:bg-[#3aa594]'
+                                : 'cursor-not-allowed bg-gray-200 text-gray-400'
+                        }`}
                     >
-                        {currentStep === STEPS.length - 1 ? '완료' : '다음 단계'}
+                        {currentStep === STEPS.length - 1 ? '다음 단계' : '다음 단계'}
                     </button>
                 </div>
             </section>
@@ -362,7 +381,6 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">1. 나이를 알려주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <input
                     type="number"
@@ -376,7 +394,6 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">2. 학부를 선택해 주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <select
                     value={basicInfo.department}
@@ -407,30 +424,27 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">3. 성별을 선택해 주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                     <button
                         type="button"
                         onClick={() => setBasicInfo((prev) => ({ ...prev, gender: 'male' }))}
-                        className={`h-11 rounded-full border text-sm transition
-              ${
-                  basicInfo.gender === 'male'
-                      ? 'border-[#4CB7A5] bg-[#E4F5F1] text-[#20927E]'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-[#4CB7A5]/60'
-              }`}
+                        className={`h-11 rounded-full border text-sm transition ${
+                            basicInfo.gender === 'male'
+                                ? 'border-[#4CB7A5] bg-[#E4F5F1] text-[#20927E]'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-[#4CB7A5]/60'
+                        }`}
                     >
                         남성
                     </button>
                     <button
                         type="button"
                         onClick={() => setBasicInfo((prev) => ({ ...prev, gender: 'female' }))}
-                        className={`h-11 rounded-full border text-sm transition
-              ${
-                  basicInfo.gender === 'female'
-                      ? 'border-[#4CB7A5]  text-[#4CB7A5]'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-[#4CB7A5]/60'
-              }`}
+                        className={`h-11 rounded-full border text-sm transition ${
+                            basicInfo.gender === 'female'
+                                ? 'border-[#4CB7A5] text-[#4CB7A5]'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-[#4CB7A5]/60'
+                        }`}
                     >
                         여성
                     </button>
@@ -440,19 +454,14 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">4. MBTI를 알려주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
-                {/* MBTI 버튼 2x4 */}
                 <div className="grid grid-cols-2 gap-2">
                     {MBTI_PAIRS.map(([left, right], rowIndex) => {
                         const selected = basicInfo.mbti[rowIndex] || '';
 
                         const handleClick = (ch: string) => {
                             const arr = basicInfo.mbti.padEnd(4, ' ').slice(0, 4).split('');
-
-                            // 같은 글자 다시 누르면 해제
                             arr[rowIndex] = arr[rowIndex] === ch ? ' ' : ch;
-
                             const next = arr.join('').trimEnd();
                             setBasicInfo((prev) => ({ ...prev, mbti: next }));
                         };
@@ -464,12 +473,11 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
                                     key={ch}
                                     type="button"
                                     onClick={() => handleClick(ch)}
-                                    className={`h-11 rounded-xl border text-sm font-medium transition
-                                        ${
-                                            isActive
-                                                ? 'border-[#4CB7A5] bg-white text-[#4CB7A5]'
-                                                : 'border-transparent bg-[#F3F4F6] text-[#BDBDBD]'
-                                        }`}
+                                    className={`h-11 rounded-xl border text-sm font-medium transition ${
+                                        isActive
+                                            ? 'border-[#4CB7A5] bg-white text-[#4CB7A5]'
+                                            : 'border-transparent bg-[#F3F4F6] text-[#BDBDBD]'
+                                    }`}
                                 >
                                     {ch}
                                 </button>
@@ -496,36 +504,65 @@ type StepRoutineProps = {
     setSleepTime: (v: string) => void;
 };
 
-function StepRoutine({ wakeTime, setWakeTime, sleepTime, setSleepTime }: StepRoutineProps) {
+function StepRoutine({ setWakeTime, setSleepTime }: StepRoutineProps) {
+    const [wakePeriod, setWakePeriod] = React.useState<'오전' | '오후'>('오전');
+    const [wakeDetail, setWakeDetail] = React.useState('');
+    const [sleepPeriod, setSleepPeriod] = React.useState<'오전' | '오후'>('오후');
+    const [sleepDetail, setSleepDetail] = React.useState('');
+
+    React.useEffect(() => {
+        if (wakeDetail.trim()) setWakeTime(`${wakePeriod} ${wakeDetail.trim()}`);
+        else setWakeTime('');
+    }, [wakePeriod, wakeDetail, setWakeTime]);
+
+    React.useEffect(() => {
+        if (sleepDetail.trim()) setSleepTime(`${sleepPeriod} ${sleepDetail.trim()}`);
+        else setSleepTime('');
+    }, [sleepPeriod, sleepDetail, setSleepTime]);
+
     return (
         <div className="space-y-8">
-            {/* 기상 시간 */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">5. 기상 시간대를 선택해주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setWakePeriod((prev) => (prev === '오전' ? '오후' : '오전'))}
+                        className="h-9 w-20 rounded-full border border-gray-200 bg-white text-xs text-gray-700 outline-none"
+                    >
+                        {wakePeriod}
+                    </button>
+
                     <input
-                        type="time"
-                        value={wakeTime}
-                        onChange={(e) => setWakeTime(e.target.value)}
+                        type="text"
+                        value={wakeDetail}
+                        onChange={(e) => setWakeDetail(e.target.value)}
+                        placeholder="00시 00분"
                         className="h-9 flex-1 rounded-full border border-gray-200 bg-white px-4 text-xs text-gray-700 outline-none focus:border-[#4CB7A5]"
                     />
                 </div>
             </div>
 
-            {/* 취침 시간 */}
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">6. 취침 시간대를 선택해주세요.</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setSleepPeriod((prev) => (prev === '오전' ? '오후' : '오전'))}
+                        className="h-9 w-20 rounded-full border border-gray-200 bg-white text-xs text-gray-700 outline-none"
+                    >
+                        {sleepPeriod}
+                    </button>
+
                     <input
-                        type="time"
-                        value={sleepTime}
-                        onChange={(e) => setSleepTime(e.target.value)}
+                        type="text"
+                        value={sleepDetail}
+                        onChange={(e) => setSleepDetail(e.target.value)}
+                        placeholder="00시 00분"
                         className="h-9 flex-1 rounded-full border border-gray-200 bg-white px-4 text-xs text-gray-700 outline-none focus:border-[#4CB7A5]"
                     />
                 </div>
@@ -547,7 +584,6 @@ function StepHygiene({ showerFreq, setShowerFreq, cleaningFreq, setCleaningFreq 
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">7. 샤워는 보통 얼마나 자주 하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex flex-col">
                     <CircleOption
@@ -576,7 +612,6 @@ function StepHygiene({ showerFreq, setShowerFreq, cleaningFreq, setCleaningFreq 
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">8. 방 청소는 얼마나 자주 하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex flex-col">
                     <CircleOption
@@ -614,8 +649,6 @@ type StepLifestyleProps = {
     setTemperaturePref: (v: { cold: string; hot: string }) => void;
     outgoingFreq: string;
     setOutgoingFreq: (v: string) => void;
-    mealStyle: string;
-    setMealStyle: (v: string) => void;
     mealPlace: string;
     setMealPlace: (v: string) => void;
     mealNote: string;
@@ -631,8 +664,6 @@ function StepLifestyle({
     setTemperaturePref,
     outgoingFreq,
     setOutgoingFreq,
-    mealStyle,
-    setMealStyle,
     mealPlace,
     setMealPlace,
     mealNote,
@@ -657,17 +688,15 @@ function StepLifestyle({
 
     return (
         <div className="space-y-10">
-            {/* 9. 흡연 여부 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">9. 흡연은 어느 정도 하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex gap-2">
                     <button
                         type="button"
                         onClick={() => setActivityLevel('smoker')}
-                        className={`flex-1 rounded-full border text-sm py-2.5 transition ${
+                        className={`flex-1 rounded-full border py-2.5 text-sm transition ${
                             activityLevel === 'smoker'
                                 ? 'border-[#4CB7A5] bg-[#E4F5F1] text-[#20927E]'
                                 : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-[#4CB7A5]/60'
@@ -678,7 +707,7 @@ function StepLifestyle({
                     <button
                         type="button"
                         onClick={() => setActivityLevel('non-smoker')}
-                        className={`flex-1 rounded-full border text-sm py-2.5 transition ${
+                        className={`flex-1 rounded-full border py-2.5 text-sm transition ${
                             activityLevel === 'non-smoker'
                                 ? 'border-[#4CB7A5] bg-[#E4F5F1] text-[#20927E]'
                                 : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-[#4CB7A5]/60'
@@ -689,11 +718,9 @@ function StepLifestyle({
                 </div>
             </div>
 
-            {/* 10. 잠버릇 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">10. 잠버릇이 있다면 알려주세요. (중복 선택 가능)</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                     <CircleOption
@@ -739,11 +766,9 @@ function StepLifestyle({
                 </div>
             </div>
 
-            {/* 11. 추위/더위 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">11. 추위와 더위 중 어떤 환경을 더 힘들어하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="space-y-3">
                     <ToggleYesNo
@@ -759,11 +784,9 @@ function StepLifestyle({
                 </div>
             </div>
 
-            {/* 12. 본가 방문 빈도 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">12. 본가는 얼마나 자주 가시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                     <CircleOption
@@ -789,14 +812,11 @@ function StepLifestyle({
                 </div>
             </div>
 
-            {/* 13. 식사 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">13. 식사는 보통 어떻게 해결하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
 
-                {/* 장소 + 직접 입력 */}
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-2">
                         <select
@@ -855,11 +875,9 @@ function StepHobby({
 
     return (
         <div className="space-y-10">
-            {/* 14. 게임 빈도 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">14. 게임은 얼마나 자주 하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex flex-col">
                     <CircleOption
@@ -885,11 +903,9 @@ function StepHobby({
                 </div>
             </div>
 
-            {/* 15. 음주 빈도 */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">15. 음주는 어느 정도 하시나요?</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
                 <div className="flex flex-col">
                     <CircleOption
@@ -914,7 +930,6 @@ function StepHobby({
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">16. 술 마시면 어떤 스타일인가요? (중복 선택 가능)</span>
-                    <span className="text-xs text-[#4CB7A5]">필수</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1">
@@ -954,36 +969,34 @@ function StepHobby({
                         onClick={() => toggleHomeStyle('loud')}
                     />
                     <CircleOption
-                        label="크게 달라지지 않음"  
+                        label="크게 달라지지 않음"
                         selected={homeStyle.includes('nochange')}
                         onClick={() => toggleHomeStyle('nochange')}
                     />
                 </div>
             </div>
 
-            {/* 17. 취미 */}
             <div className="space-y-2">
                 <span className="text-sm font-semibold">17. 어떤 취미가 있으신가요? (5개까지 선택 가능)</span>
-                <CheckboxGroup
-                    values={hobbies}
-                    onChange={setHobbies}
-                    maxSelected={5}
-                    options={[
-                        { label: 'OTT 시청', value: 'ott' },
-                        { label: '카페/맛집 탐방', value: 'cafe' },
-                        { label: '게임하기', value: 'game' },
-                        { label: '여행', value: 'travel' },
-                        { label: '독서', value: 'reading' },
-                        { label: '음악 감상', value: 'music' },
-                        { label: '운동/헬스', value: 'workout' },
-                        { label: '수다 떨기', value: 'chat' },
-                        { label: '요리하기', value: 'cook' },
-                        { label: '사진 찍기', value: 'photo' },
-                    ]}
-                />
-                <p className="text-xs text-gray-400">
-                    취미를 5개까지 선택할 수 있고, 5개를 모두 선택하면 더 이상 선택할 수 없습니다.
-                </p>
+                <div className="grid grid-cols-2 gap-2">
+                    <CheckboxGroup
+                        values={hobbies}
+                        onChange={setHobbies}
+                        maxSelected={5}
+                        options={[
+                            { label: 'OTT 시청', value: 'ott' },
+                            { label: '카페/맛집 탐방', value: 'cafe' },
+                            { label: '게임하기', value: 'game' },
+                            { label: '여행', value: 'travel' },
+                            { label: '독서', value: 'reading' },
+                            { label: '음악 감상', value: 'music' },
+                            { label: '운동/헬스', value: 'workout' },
+                            { label: '수다 떨기', value: 'chat' },
+                            { label: '요리하기', value: 'cook' },
+                            { label: '사진 찍기', value: 'photo' },
+                        ]}
+                    />
+                </div>
             </div>
         </div>
     );
@@ -998,7 +1011,7 @@ function StepRoommateWish({ roommateWish, setRoommateWish }: StepRoommateWishPro
     return (
         <div className="space-y-4">
             <span className="text-sm font-semibold">18. 룸메이트에게 바라는 점이 있나요?</span>
-            <TextAreaWithPreview value={roommateWish} onChange={setRoommateWish} />
+            <TextAreaWithPreview value={roommateWish} onChange={setRoommateWish} maxLength={150} />
         </div>
     );
 }
