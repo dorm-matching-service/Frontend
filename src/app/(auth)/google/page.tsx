@@ -8,7 +8,7 @@ export default function StartKnockPage() {
   const router = useRouter();
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center bg-white">
+    <div>
       <AuthBox>
         <div className="flex flex-col items-center justify-center gap-3">
           <img src="/Knock.svg" alt="Knock" />
@@ -25,6 +25,6 @@ export default function StartKnockPage() {
           </AuthLoginButton>
         </div>
       </AuthBox>
-    </main>
+    </div>
   );
 }

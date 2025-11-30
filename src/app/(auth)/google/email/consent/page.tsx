@@ -1,7 +1,8 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import AuthBox from "../../../_components/AuthBox";
-import AuthButton from "../../../_components/AuthButton";
+import AuthButton from "../../../../../components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -27,7 +28,7 @@ export default function StartKnockPage() {
   const [openModal, setOpenModal] = useState<null | "terms" | "privacy">(null);
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center bg-white">
+    <div className="flex flex-col">
       <AuthBox className="w-[700px] h-[600px] ">
         <div className="flex flex-col  gap-5">
           <p className=" text-gray-900 font-bold text-24 self-center mb-10">
@@ -121,6 +122,6 @@ export default function StartKnockPage() {
         보호 - 수집된 모든 정보는 암호화 등 안전한 방법으로 보호되며 제3자에게
         제공되지 않습니다.
       </AgreementModal>
-    </main>
+    </div>
   );
 }

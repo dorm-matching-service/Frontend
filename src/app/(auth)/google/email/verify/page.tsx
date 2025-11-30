@@ -7,7 +7,7 @@ import useEmailVerify from "@/src/hooks/auth/useEmailVerify";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
-import AuthButton from "../../../_components/AuthButton";
+import AuthButton from "../../../../../components/ui/Button";
 import AuthInput from "../../../_components/AuthInput";
 import AuthBox from "../../../_components/AuthBox";
 import AuthPopup from "../../../_components/AuthPopup";
@@ -47,12 +47,10 @@ export default function VerifyPage() {
         clearInterval(timer);
         return;
       }
-      
 
       //1000으로 나눠서 밀리초로 변환
       const min = Math.floor(diff / 1000 / 60);
       const sec = Math.floor((diff / 1000) % 60);
-
 
       //.padStart(2, "0") → 앞에 0을 붙여서 2자리로 만들기 padStart(길이, 채울문자)
       //초가 0~9이면 앞에 0을 붙여서 두 자리로 만들어줌.
@@ -78,7 +76,7 @@ export default function VerifyPage() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center bg-white">
+    <div className="flex flex-col">
       <p className="text-gray-900 font-bold text-center mb-6 text-32">
         Knock에서 이메일로 받은 <br /> 인증 코드를 입력해주세요
       </p>
@@ -129,6 +127,6 @@ export default function VerifyPage() {
           />
         )}
       </AuthBox>
-    </main>
+    </div>
   );
 }
