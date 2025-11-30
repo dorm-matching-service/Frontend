@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
+import { usePrivacyConsent } from "../../../../../hooks/user/usePrivacyConsent";
 import AuthBox from "../../../_components/AuthBox";
 import AuthButton from "../../../../../components/ui/Button";
 import { useRouter } from "next/navigation";
@@ -10,8 +11,10 @@ import AgreementAllCheck from "./_components/AgreementAllCheck";
 import AgreementItem from "./_components/AgreementItem";
 import AgreementModal from "./_components/AgreementModal";
 
-export default function StartKnockPage() {
+export default function ConsentPage() {
   const router = useRouter();
+
+  const { submitConsent, loading } = usePrivacyConsent();
 
   const [termsChecked, setTermsChecked] = useState(false);
   const [privacyChecked, setPrivacyChecked] = useState(false);
@@ -63,7 +66,15 @@ export default function StartKnockPage() {
           <AuthButton
             disabled={!allChecked}
             className={allChecked ? "bg-main" : "bg-gray-300"}
-            onClick={() => router.push("/home")}
+            onClick={async () => {
+              try {
+                await submitConsent(1);
+                router.push("/");
+              } catch (error) {
+                //추후 에러 메세지를 사용자한테 alert창으로 디자인으로 이쁘게 뜨게 수정해야함
+                console.log("동의 처리 중 오류 발생")
+              }
+            }}
           >
             Knock 시작하기
           </AuthButton>
