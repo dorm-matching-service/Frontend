@@ -19,6 +19,8 @@ export async function sendEmail(email: string) {
   };
 }
 
+import { saveAccessToken } from "../../lib/auth";
+
 export async function verifyEmail({
   email,
   code,
@@ -35,6 +37,10 @@ export async function verifyEmail({
   const data = await res.json();
   if (!res.ok || !data?.ok) {
     throw new Error(data?.message || data?.error || "인증 실패");
+  }
+
+  if (data.access_token) {
+    saveAccessToken(data.access_token);
   }
 
   return data;
