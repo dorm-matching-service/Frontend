@@ -29,6 +29,159 @@ const MBTI_PAIRS: [string, string][] = [
     ['J', 'P'],
 ];
 
+type LifestyleSurveyPayload = {
+    age: number;
+    department: string;
+
+    gender: 'MALE' | 'FEMALE';
+
+    mbti1: 'E' | 'I';
+    mbti2: 'N' | 'S';
+    mbti3: 'T' | 'F';
+    mbti4: 'J' | 'P';
+
+    wakeTimeMinutes: number;
+    sleepTimeMinutes: number;
+
+    showerFreq: 'ONCE' | 'TWICE' | 'TWO_DAYS' | 'RARE';
+    cleaningFreq: 'ONCE' | 'TWICE' | 'TWO_DAYS' | 'RARE';
+
+    activityLevel: 'SMOKER' | 'NON_SMOKER';
+
+    roomTraits: string[];
+
+    coldSensitivity: boolean;
+    hotSensitivity: boolean;
+
+    outgoingFreq: 'EVERY_WEEK' | 'TWO_WEEKS' | 'WEEKENDS' | 'VACATION';
+
+    mealPlace: 'DORM' | 'OUTSIDE' | null;
+    mealNote: string | null;
+
+    gamingTime: 'NONE' | 'ONE_MINUS' | 'ONE_TO_THREE' | 'THREE_PLUS';
+    drinkFreq: 'NONE' | 'RARE' | 'ONE_TWO' | 'THREE_PLUS';
+
+    homeStyle: string[];
+    hobbies: string[];
+
+    roommateWish: string;
+    selfTags: string[];
+};
+
+const mapGender = (v: BasicInfo['gender']): 'MALE' | 'FEMALE' => {
+    if (v === 'male') return 'MALE';
+    return 'FEMALE';
+};
+
+const mapShowerFreq = (v: string): 'ONCE' | 'TWICE' | 'TWO_DAYS' | 'RARE' => {
+    switch (v) {
+        case '1':
+            return 'ONCE';
+        case '2+':
+            return 'TWICE';
+        case '2days':
+            return 'TWO_DAYS';
+        default:
+            return 'RARE';
+    }
+};
+
+const mapCleaningFreq = (v: string): 'ONCE' | 'TWICE' | 'TWO_DAYS' | 'RARE' => {
+    switch (v) {
+        case '1':
+            return 'ONCE';
+        case '2+':
+            return 'TWICE';
+        case '2days':
+            return 'TWO_DAYS';
+        default:
+            return 'RARE';
+    }
+};
+
+const mapActivityLevel = (v: string): 'SMOKER' | 'NON_SMOKER' => {
+    return v === 'smoker' ? 'SMOKER' : 'NON_SMOKER';
+};
+
+const mapOutgoingFreq = (v: string): 'EVERY_WEEK' | 'TWO_WEEKS' | 'WEEKENDS' | 'VACATION' => {
+    switch (v) {
+        case 'every-week':
+            return 'EVERY_WEEK';
+        case 'two-weeks':
+            return 'TWO_WEEKS';
+        case 'weekends':
+            return 'WEEKENDS';
+        default:
+            return 'VACATION';
+    }
+};
+
+const mapMealPlace = (v: string): 'DORM' | 'OUTSIDE' | null => {
+    if (!v) return null;
+    return v === 'dorm' ? 'DORM' : 'OUTSIDE';
+};
+
+const mapGamingTime = (v: string): 'NONE' | 'ONE_MINUS' | 'ONE_TO_THREE' | 'THREE_PLUS' => {
+    switch (v) {
+        case 'none':
+            return 'NONE';
+        case '1-':
+            return 'ONE_MINUS';
+        case '1-3':
+            return 'ONE_TO_THREE';
+        default:
+            return 'THREE_PLUS';
+    }
+};
+
+const mapDrinkFreq = (v: string): 'NONE' | 'RARE' | 'ONE_TWO' | 'THREE_PLUS' => {
+    switch (v) {
+        case 'none':
+            return 'NONE';
+        case 'rare':
+            return 'RARE';
+        case '1-2':
+            return 'ONE_TWO';
+        default:
+            return 'THREE_PLUS';
+    }
+};
+
+const mapYesNoToBool = (v: string): boolean => v === 'yes';
+
+const splitMbti = (mbti: string) => {
+    if (mbti.length !== 4) throw new Error('MBTI가 4글자가 아니에요.');
+    const [mbti1, mbti2, mbti3, mbti4] = mbti.toUpperCase().split('');
+    return {
+        mbti1: mbti1 as 'E' | 'I',
+        mbti2: mbti2 as 'N' | 'S',
+        mbti3: mbti3 as 'T' | 'F',
+        mbti4: mbti4 as 'J' | 'P',
+    };
+};
+
+const parseKoreanTimeToMinutes = (text: string): number => {
+    const trimmed = text.trim();
+    const isPM = trimmed.startsWith('오후');
+    const isAM = trimmed.startsWith('오전');
+    if (!isPM && !isAM) throw new Error('시간 형식이 올바르지 않아요.');
+
+    const m = trimmed.match(/(오전|오후)\s*(\d{1,2})시\s*(\d{1,2})분/);
+    if (!m) throw new Error('시간 형식이 올바르지 않아요.');
+
+    let hour = Number(m[2]);
+    const minute = Number(m[3]);
+
+    if (Number.isNaN(hour) || Number.isNaN(minute)) throw new Error('시간 숫자가 올바르지 않아요.');
+    if (hour < 0 || hour > 12) throw new Error('시(hour)는 1~12 범위로 입력해 주세요.');
+    if (minute < 0 || minute > 59) throw new Error('분(minute)은 0~59 범위로 입력해 주세요.');
+
+    if (isAM && hour === 12) hour = 0;
+    if (isPM && hour !== 12) hour += 12;
+
+    return hour * 60 + minute;
+};
+
 type CircleOptionProps = {
     label: string;
     selected: boolean;
@@ -98,32 +251,24 @@ export default function LifestyleTestPage() {
     const [wakeTime, setWakeTime] = React.useState('');
     const [sleepTime, setSleepTime] = React.useState('');
 
-    // Step 2
     const [showerFreq, setShowerFreq] = React.useState('');
     const [cleaningFreq, setCleaningFreq] = React.useState('');
 
-    // Step 3 (생활습관)
-    const [activityLevel, setActivityLevel] = React.useState(''); // 흡연 여부
-    const [roomTraits, setRoomTraits] = React.useState<string[]>([]); // 잠버릇
-    const [temperaturePref, setTemperaturePref] = React.useState<{ cold: string; hot: string }>({
-        cold: '',
-        hot: '',
-    });
-    const [outgoingFreq, setOutgoingFreq] = React.useState(''); // 본가 방문 빈도
-    const [mealPlace, setMealPlace] = React.useState(''); // 식사 장소 선택
-    const [mealNote, setMealNote] = React.useState(''); // 직접 입력 메모
+    const [activityLevel, setActivityLevel] = React.useState('');
+    const [roomTraits, setRoomTraits] = React.useState<string[]>([]);
+    const [temperaturePref, setTemperaturePref] = React.useState<{ cold: string; hot: string }>({ cold: '', hot: '' });
+    const [outgoingFreq, setOutgoingFreq] = React.useState('');
+    const [mealPlace, setMealPlace] = React.useState('');
+    const [mealNote, setMealNote] = React.useState('');
     const isMealAnswered = mealPlace !== '' || mealNote.trim().length > 0;
 
-    // Step 4
     const [gamingTime, setGamingTime] = React.useState('');
     const [drinkFreq, setDrinkFreq] = React.useState('');
     const [homeStyle, setHomeStyle] = React.useState<string[]>([]);
     const [hobbies, setHobbies] = React.useState<string[]>([]);
 
-    // Step 5
     const [roommateWish, setRoommateWish] = React.useState('');
 
-    // 마지막 self tag
     const [selfTags, setSelfTags] = React.useState<string[]>([]);
 
     const canGoNext = () => {
@@ -163,7 +308,6 @@ export default function LifestyleTestPage() {
         if (phase !== 'form') return;
 
         if (currentStep === STEPS.length - 1) {
-            // 모든 문항 작성 끝 → 태그 입력 페이지로 이동
             setPhase('selfTag');
             return;
         }
@@ -175,36 +319,82 @@ export default function LifestyleTestPage() {
             if (currentStep === 0) return;
             setCurrentStep((prev) => prev - 1);
         } else if (phase === 'selfTag') {
-            // 태그 페이지에서 '이전' 누르면 마지막 스텝으로 돌아가기
             setPhase('form');
             setCurrentStep(STEPS.length - 1);
         }
     };
 
-    const handleSubmitAll = () => {
+    const handleSubmitAll = async () => {
         if (selfTags.length < 5) return;
 
-        setPhase('complete');
+        try {
+            const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+            if (!apiBase) throw new Error('NEXT_PUBLIC_API_BASE_URL 환경변수가 없어요.');
 
-        console.log('제출 데이터:', {
-            basicInfo,
-            wakeTime,
-            sleepTime,
-            showerFreq,
-            cleaningFreq,
-            activityLevel,
-            roomTraits,
-            temperaturePref,
-            outgoingFreq,
-            mealPlace,
-            mealNote,
-            gamingTime,
-            drinkFreq,
-            homeStyle,
-            hobbies,
-            roommateWish,
-            selfTags,
-        });
+            const token = localStorage.getItem('accessToken');
+            if (!token) throw new Error('로그인이 필요해요(토큰 없음).');
+
+            const { mbti1, mbti2, mbti3, mbti4 } = splitMbti(basicInfo.mbti);
+
+            const payload: LifestyleSurveyPayload = {
+                age: Number(basicInfo.age),
+                department: basicInfo.department,
+
+                gender: mapGender(basicInfo.gender),
+
+                mbti1,
+                mbti2,
+                mbti3,
+                mbti4,
+
+                wakeTimeMinutes: parseKoreanTimeToMinutes(wakeTime),
+                sleepTimeMinutes: parseKoreanTimeToMinutes(sleepTime),
+
+                showerFreq: mapShowerFreq(showerFreq),
+                cleaningFreq: mapCleaningFreq(cleaningFreq),
+
+                activityLevel: mapActivityLevel(activityLevel),
+
+                roomTraits,
+
+                coldSensitivity: mapYesNoToBool(temperaturePref.cold),
+                hotSensitivity: mapYesNoToBool(temperaturePref.hot),
+
+                outgoingFreq: mapOutgoingFreq(outgoingFreq),
+
+                mealPlace: mapMealPlace(mealPlace),
+                mealNote: mealNote.trim() ? mealNote.trim() : null,
+
+                gamingTime: mapGamingTime(gamingTime),
+                drinkFreq: mapDrinkFreq(drinkFreq),
+
+                homeStyle,
+                hobbies,
+
+                roommateWish,
+                selfTags,
+            };
+
+            const res = await fetch(`${apiBase}/lifestyle-survey`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`서버 오류: ${res.status} ${text}`);
+            }
+
+            setPhase('complete');
+            console.log('제출 성공 payload:', payload);
+        } catch (e) {
+            console.error(e);
+            alert(e instanceof Error ? e.message : '제출 중 오류가 발생했어요.');
+        }
     };
 
     if (phase === 'selfTag') {
@@ -338,7 +528,8 @@ export default function LifestyleTestPage() {
                     {currentStep === 5 && (
                         <StepRoommateWish roommateWish={roommateWish} setRoommateWish={setRoommateWish} />
                     )}
-                </div>{' '}
+                </div>
+
                 <div className="mt-10 flex justify-between gap-4">
                     <button
                         type="button"
@@ -362,7 +553,7 @@ export default function LifestyleTestPage() {
                                 : 'cursor-not-allowed bg-gray-200 text-gray-400'
                         }`}
                     >
-                        {currentStep === STEPS.length - 1 ? '다음 단계' : '다음 단계'}
+                        다음 단계
                     </button>
                 </div>
             </section>
@@ -421,6 +612,7 @@ function StepBasicInfo({ basicInfo, setBasicInfo }: StepBasicInfoProps) {
                     <option value="국제학부">국제학부</option>
                 </select>
             </div>
+
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">3. 성별을 선택해 주세요.</span>
@@ -676,11 +868,8 @@ function StepLifestyle({
             next = next.includes('none') ? [] : ['none'];
         } else {
             next = next.filter((v) => v !== 'none');
-            if (next.includes(value)) {
-                next = next.filter((v) => v !== value);
-            } else {
-                next = [...next, value];
-            }
+            if (next.includes(value)) next = next.filter((v) => v !== value);
+            else next = [...next, value];
         }
 
         setRoomTraits(next);
