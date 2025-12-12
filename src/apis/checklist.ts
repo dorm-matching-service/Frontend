@@ -13,7 +13,7 @@ export async function fetchChecklistStatus(): Promise<ChecklistStatusResponse> {
     throw new Error("인증 토큰이 없습니다.");
   }
 
-  const res = await fetch(`${API_BASE_URL}/checklist/me`, {
+  const res = await fetch(`${API_BASE_URL}/lifestyle-survey/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
