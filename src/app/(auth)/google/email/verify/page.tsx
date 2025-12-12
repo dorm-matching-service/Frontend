@@ -22,8 +22,8 @@ export default function VerifyPage() {
   const expiresAt = searchParams.get("expiresAt");
   const [timeLeft, setTimeLeft] = useState("");
 
-  const email = localStorage.getItem("email") || "";
-
+  const rawEmail = searchParams.get("email");
+  const email = rawEmail ? decodeURIComponent(rawEmail) : "";
 
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const {
@@ -63,6 +63,17 @@ export default function VerifyPage() {
   }, [expiresAt]);
 
   const onValid = ({ code }: VerifyForm) => {
+    if (!email) {
+      setPopupMessage("이메일 정보가 없습니다. 다시 인증을 요청해주세요.");
+      return;
+    }
+    console.log("verify payload", {
+      email,
+      code,
+      emailType: typeof email,
+      codeType: typeof code,
+    });
+
     mutate(
       { email, code },
       {
@@ -95,12 +106,17 @@ export default function VerifyPage() {
           <AuthInput
             rightAddon={timeLeft}
             type="text"
+            inputMode="numeric"
             placeholder="6자리 코드"
+            maxLength={6}
             {...register("code", {
               required: "코드를 입력해주세요.",
               pattern: {
                 value: /^[0-9]{6}$/,
                 message: "올바른 숫자 코드를 입력해주세요.",
+              },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\D/g, "");
               },
             })}
           />
