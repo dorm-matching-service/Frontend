@@ -38,10 +38,11 @@ export default function EmailPage() {
     mode: "onChange", //입력 즉시 유효성 검사
   });
 
-  const { mutate, isPending, isError, isSuccess, data, error } = useEmailStart({
+  const { mutate, isPending, data, error } = useEmailStart({
     //사용자가 볼 성공 에러 문자
     //onSuccess: (data, variables, context) => {} 이므로 두 번째 파라미터인 variables 만 사용하기 위함
     onSuccess: (data, variable) => {
+      console.log("onSuccess 실행됨!", data);
       setSentEmail(variable.email);// 이메일 저장
       setExpirseAt(data.expiresAt);
       setPopupType("success");//인증 성공 표시
@@ -65,14 +66,7 @@ export default function EmailPage() {
     setPopupType(null);
   };
 
-  // 개발자가 봐야하는 성공 에러 문자
-  if (isSuccess) {
-    console.log("성공:", data);
-  }
 
-  if (isError) {
-    console.log("에러:", error?.message || "요청 실패");
-  }
   const onValid = (data: EmailForm) => {
     mutate(data.email); // data.email이 실제 입력된 값
   };

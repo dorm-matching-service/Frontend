@@ -22,7 +22,8 @@ export default function VerifyPage() {
   const expiresAt = searchParams.get("expiresAt");
   const [timeLeft, setTimeLeft] = useState("");
 
-  const email = searchParams.get("email") || "";
+  const email = localStorage.getItem("email") || "";
+
 
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
   const {
@@ -66,7 +67,7 @@ export default function VerifyPage() {
       { email, code },
       {
         onSuccess: (res) => {
-          router.push(`/email/consent?email=${email}`);
+          router.push(`/google/email/consent`);
         },
         onError: () => {
           setPopupMessage("인증 코드가 올바르지 않습니다.");

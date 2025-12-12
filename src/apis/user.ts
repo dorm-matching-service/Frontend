@@ -3,7 +3,7 @@
 export async function updatePrivacyConsent(version: number) {
   const token = localStorage.getItem("access_token"); 
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/consent/privacy`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/consent/privacy`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
