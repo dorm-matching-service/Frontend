@@ -28,20 +28,25 @@ export async function verifyEmail({
   email: string;
   code: string;
 }) {
-  const res = await fetch(`${API_BASE_URL}/auth/email/verify`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, code }),
-  });
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/email/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code }),
+    });
 
-  const data = await res.json();
-  if (!res.ok || !data?.ok) {
-    throw new Error(data?.message || data?.error || "인증 실패");
+    const data = await res.json();
+    if (!res.ok || !data?.ok) {
+      throw new Error(data?.message || data?.error || "인증 실패");
+    }
+
+    if (data.access_token) {
+      saveAccessToken(data.access_token);
+    }
+
+    return data;
+  } catch (err) {
+    console.log("❌ verify error:", err);
+    throw err;
   }
-
-  if (data.access_token) {
-    saveAccessToken(data.access_token);
-  }
-
-  return data;
 }
