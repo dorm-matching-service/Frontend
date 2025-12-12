@@ -3,8 +3,10 @@ import { verifyEmail } from '@/src/apis/auth.email'
 
 interface VerifyEmailResponse {
   ok: boolean;
-  message: string;
+  access_token: string;
   email: string;
+  isNew: boolean;
+  hasConsented: boolean;
 }
 
 interface VerifyEmailVariables {

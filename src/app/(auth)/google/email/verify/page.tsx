@@ -78,7 +78,15 @@ export default function VerifyPage() {
       { email, code },
       {
         onSuccess: (res) => {
-          router.push(`/google/email/consent`);
+          console.log("verify response:", res);
+          console.log("hasConsented:", res.hasConsented);
+          //개인정보 동의 여부(hasConsented) 가 true면 메인 페이지로
+          //false면 개인정보 동의 페이지로 이동
+          if (res.hasConsented) {
+            router.replace("/");
+          } else {
+            router.replace("/google/email/consent");
+          }
         },
         onError: () => {
           setPopupMessage("인증 코드가 올바르지 않습니다.");
