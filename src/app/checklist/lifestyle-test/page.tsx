@@ -4,6 +4,8 @@ import React from 'react';
 import { StepTabs } from '../../../components/survey/StepTabs';
 import { CheckboxGroup, TextAreaWithPreview, TagInput } from '../../../components/survey/QuestionControls';
 
+import { getAccessToken } from '@/lib/auth';
+
 const STEPS = [
     '기본정보 4문항',
     '생활루틴 2문항',
@@ -331,7 +333,7 @@ export default function LifestyleTestPage() {
             const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
             if (!apiBase) throw new Error('NEXT_PUBLIC_API_BASE_URL 환경변수가 없어요.');
 
-            const token = localStorage.getItem('accessToken');
+            const token = getAccessToken();
             if (!token) throw new Error('로그인이 필요해요(토큰 없음).');
 
             const { mbti1, mbti2, mbti3, mbti4 } = splitMbti(basicInfo.mbti);
@@ -386,6 +388,7 @@ export default function LifestyleTestPage() {
 
             if (!res.ok) {
                 const text = await res.text();
+                console.error(res.status, text);
                 throw new Error(`서버 오류: ${res.status} ${text}`);
             }
 
