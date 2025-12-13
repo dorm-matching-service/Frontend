@@ -1,19 +1,18 @@
 // src/apis/user.ts
-import { getAccessToken } from "@/lib/auth";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function updatePrivacyConsent(version: number) {
-  const token = localStorage.getItem("access_token");
-
-  const res = await fetch(`${API_BASE_URL}/users/consent/privacy`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ version }),
-  });
+  const res = await fetchWithAuth(
+    `${API_BASE_URL}/users/consent/privacy`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ version }),
+    }
+  );
 
   if (!res.ok) {
     const error = await res.json();
@@ -23,26 +22,20 @@ export async function updatePrivacyConsent(version: number) {
   return res.json(); // { message, user }
 }
 
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
+
 export async function fetchMe() {
-  const token = getAccessToken();
+  try {
+    const res = await fetchWithAuth(`${API_BASE_URL}/users/me`);
 
-  if (!token) return null;
+    if (!res.ok) return null;
 
-  const res = await fetch(`${API_BASE_URL}/users/me`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+    const data = await res.json();
 
-  if (res.ok) {
-    console.log("토큰 만료 혹은 인증 실패");
+    return data.user ?? null;
+
+  } catch {
+    // fetchWithAuth에서 401이면 이미 처리됨
     return null;
   }
-  
-  const data = await res.json();
-
-  if (!data.ok) return null;
-
-  return data.user;
 }
