@@ -15,7 +15,7 @@ export async function fetchWithAuth(
 
   if (res.status === 401) {
     localStorage.removeItem("access_token");
-    window.location.href = "/login";
+    window.location.href = "/google";
     throw new Error("인증 만료");
   }
 
