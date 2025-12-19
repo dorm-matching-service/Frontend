@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { fetchChecklistStatus } from "@/src/apis/checklist";
+import { fetchChecklistStatus } from "@/apis/checklist";
 
 export function useChecklistStatus() {
   const [hasChecklist, setHasChecklist] = useState<boolean | null>(null);

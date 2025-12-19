@@ -15,8 +15,12 @@ export function usePrivacyConsent() {
       const response = await updatePrivacyConsent(version);
 
       return response.user; // 업데이트된 유저 반환
-    } catch (e: any) {
-      setError(e.message || "서버 오류");
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("알 수 없는 서버 오류");
+      }
       throw e;
     } finally {
       setLoading(false);

@@ -1,10 +1,9 @@
 'use client';
 
 import React from 'react';
-import { StepTabs } from '../../../components/survey/StepTabs';
-import { CheckboxGroup, TextAreaWithPreview, TagInput } from '../../../components/survey/QuestionControls';
-
-import { getAccessToken } from '@/lib/auth';
+import { StepTabs } from '@/components/survey/StepTabs';
+import { CheckboxGroup, TextAreaWithPreview, TagInput } from '@/components/survey/QuestionControls';
+import { getAccessToken } from 'lib/auth';
 
 const STEPS = [
     '기본정보 4문항',
