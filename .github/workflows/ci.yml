@@ -30,7 +30,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      # (선택) 테스트가 있으면
-      # - name: Test
-      #   run: npm test -- --runInBand
