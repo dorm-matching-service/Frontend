@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className=" w-full bg-gray-100">
             <div className="mx-auto max-w-[1280px] px-10 py-10 text-center text-gray-900">
                 <div className="mb-4 flex justify-center">
-                    <img src="/knockblack.svg" alt="Knock 로고" className="h-5 w-auto"  />
+                    <img src="/knockblack.svg" alt="Knock 로고" className="h-5 w-auto" />
                 </div>
                 <div className="mb-3 text-m font-medium">개인정보처리방침 | 서비스 이용약관</div>
                 <div className="mb-1 text-sm">(주) Knock | 대표자: 오다현, 김서영, 정하늘 | 대표전화: 1234-5678</div>
