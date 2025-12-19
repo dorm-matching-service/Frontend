@@ -1,5 +1,5 @@
-import Header from "@/src/components/ui/Header";
-import Footer from "@/src/components/ui/Footer";
+import Header from "@/components/ui/Header";
+import Footer from "@/components/ui/Footer";
 
 export default function AuthLayout({
   children,
@@ -9,7 +9,7 @@ export default function AuthLayout({
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
-      <main className="flex-1 flex items-center justify-center py-28">
+      <main className="flex-1">
           {children}
       </main>
       <Footer />

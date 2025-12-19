@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchMe } from "@/src/apis/user";
+import { fetchMe } from "@/apis/user";
 
-import type { User } from "@/src/types/user";
+import type { User } from "@/types/user";
 
 export function useMe() {
     const [user, setUser] = useState<User | null>(null);

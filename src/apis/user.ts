@@ -22,7 +22,7 @@ export async function updatePrivacyConsent(version: number) {
   return res.json(); // { message, user }
 }
 
-import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { fetchWithAuth } from "lib/fetchWithAuth";
 
 export async function fetchMe() {
   try {

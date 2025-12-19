@@ -1,4 +1,4 @@
-import AuthButton from '../../../components/ui/Button';
+import Button from "@/components/ui/Button";
 
 interface AuthPopupProps {
   message: string;
@@ -28,7 +28,7 @@ export default function AuthPopup({ message, onClose }: AuthPopupProps) {
 
         {/* 버튼 (하단 고정) */}
         <div className="p-6 border-t">
-          <AuthButton onClick={onClose}>닫기</AuthButton>
+          <Button onClick={onClose}>닫기</Button>
         </div>
 
       </div>

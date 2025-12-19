@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { fetchWithAuth } from "lib/fetchWithAuth";
 import type { MatchingResponse } from "../types/matching";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

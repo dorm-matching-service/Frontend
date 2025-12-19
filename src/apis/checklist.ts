@@ -1,6 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-import { getAccessToken } from "@/lib/auth";
+import { getAccessToken } from "lib/auth";
 
 export interface ChecklistStatusResponse {
   hasChecklist: boolean;

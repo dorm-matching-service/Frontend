@@ -1,17 +1,15 @@
-// 매칭 결과 1건
-export interface RoommateMatch {
-  id: string;
-  requesterId: string;
-  candidateId: string;
-
-  baseScore: number;
-  finalScore: number;
-
-  createdAt: string; // ISO string
+// 프론트 - 매칭 카드 1개
+export interface MatchingCardItem {
+  matchingScore: number;
+  major: string;
+  age: number;
+  wakeTime: string;
+  sleepTime: string;
+  tags: string[];
 }
 
-// 매칭 API 전체 응답
+// 매칭 API 응답
 export interface MatchingResponse {
   count: number;
-  results: RoommateMatch[];
+  results: MatchingCardItem[];
 }
