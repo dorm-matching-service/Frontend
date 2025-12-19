@@ -29,9 +29,14 @@ const variantStyles: Record<string, string> = {
     w-full 
     h-[55px]
   `,
-  // secondary: `
-  //   /* 아직 필요 없다면 주석 처리 */
-  // `,
+  secondary: `
+    min-w-[311px]
+    px-8 py-4
+    text-24 font-bold
+    bg-gray-100 text-gray-500
+    hover:bg-gray-200
+    active:scale-95
+  `,
 };
 
 export default function Button({

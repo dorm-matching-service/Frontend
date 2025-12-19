@@ -3,6 +3,7 @@
 import MatchProfileCard from "../_components/MatchProfileCard";
 import { useMatching } from "@/hooks/matching/useMatching";
 import { matchingDummy } from "./mock/matchingDummy";
+import NoMatchingResult from "../_components/NoMatchingResult";
 
 export default function MatchingPage() {
   const { data, loading, error } = useMatching();
@@ -19,15 +20,21 @@ export default function MatchingPage() {
 
   if (!data) return <div>결과가 없습니다.</div>;
 
+  if (data.count == 0) {
+    return <NoMatchingResult />;
+  } 
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6">
-      <p className="text-gray-800 text-24 font-medium">
-        매칭률이 놓은 룸메이트 {data.count} 명을 찾았어요!
-      </p>
+      <div className="flex flex-col items-center justify-center">
+        <p className="text-gray-800 text-24 font-medium">
+          매칭률이 놓은 룸메이트 {data.count} 명을 찾았어요!
+        </p>
 
-      <p className="text-gray-900 text-24 font-bold">
-        마음에 드는 카드를 눌러 자세히 알아보세요.
-      </p>
+        <p className="text-gray-900 text-24 font-bold">
+          마음에 드는 카드를 눌러 자세히 알아보세요.
+        </p>
+      </div>
 
       <ul className="w-full flex items-center justify-center gap-6">
         {/* {data.results.map((match, idx) => (
