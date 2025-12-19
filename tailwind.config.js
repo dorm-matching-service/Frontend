@@ -7,7 +7,7 @@ module.exports = {
         card: "0px 0px 10px -2px rgba(0, 0, 0, 0.25)",
         cardSoft: "0px 0px 26.8px -6px rgba(0, 0, 0, 0.25)",
         mainLift: '0px 4px 39.3px 4px rgba(0, 0, 0, 0.25)',
-
+        profileCard: "0px 0px 17.6px -4px rgba(0, 0, 0, 0.25)",
       },
     
       fontFamily: {

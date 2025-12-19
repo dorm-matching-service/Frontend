@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { verifyEmail } from '@/src/apis/auth.email'
+import { verifyEmail } from '@/apis/auth.email';
 
 interface VerifyEmailResponse {
   ok: boolean;

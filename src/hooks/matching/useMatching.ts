@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchMatchingResult } from "@/src/apis/matching";
+import { fetchMatchingResult } from "@/apis/matching";
 
-import type { MatchingResponse } from "@/src/types/matching";
+import type { MatchingResponse } from "@/types/matching";
 
 export function useMatching() {
   const [data, setData] = useState<MatchingResponse | null>(null);
