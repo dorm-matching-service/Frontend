@@ -11,10 +11,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v4 # 해당 레포지토리를 pull 받고 이동하는 action 대부분의 workflow에서 사용
 
             - name: Setup Node
               uses: actions/setup-node@v4
+              # 노드를 설치하는 action으로 가상머신안에는 대부분의 프로그래밍 언어가 설치되어 있지 않기 때문에 프로젝트 실행에 필요한 언어들을 action을 통해 다운
               with:
                   node-version: '20'
                   cache: 'npm'
