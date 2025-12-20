@@ -6,7 +6,8 @@
         "dev": "next dev --webpack",
         "build": "next build --webpack",
         "start": "next start --webpack",
-        "lint": "next lint"
+        "lint": "next lint",
+        "export": "next build --webpack"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
