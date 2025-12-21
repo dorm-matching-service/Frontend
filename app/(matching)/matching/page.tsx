@@ -1,14 +1,14 @@
 "use client";
 
-import MatchProfileCard from "../_components/MatchProfileCard";
 import { useMatching } from "@/hooks/matching/useMatching";
-import { matchingDummy } from "./mock/matchingDummy";
+
+import MatchProfileCard from "../_components/MatchProfileCard";
 import NoMatchingResult from "../_components/NoMatchingResult";
 
-export default function MatchingPage() {
-  const { data, loading, error } = useMatching();
+import Button from "@/components/ui/Button";
 
-  const dummyResults = matchingDummy.results;
+export default function MatchingPage() {
+  const { data, loading, error, rematch } = useMatching();
 
   if (loading) {
     return <div>매칭 중...</div>;
@@ -18,12 +18,20 @@ export default function MatchingPage() {
     return <div>에러 발생: {error}</div>;
   }
 
-  if (!data) return <div>결과가 없습니다.</div>;
+  if (!data) {
+    return <div>매칭 데이터를 불러오지 못했습니다.</div>;
+  }
 
-  if (data.count == 0) {
-    return <NoMatchingResult />;
-  } 
+  // 매칭 로직 실행했는데 결과가 0 일 때 NoMatchingResult 띄움
+  if (data.count === 0) {
+    return (
+       <NoMatchingResult
+      onRelaxedRematch={() => rematch("relaxed")}
+    />
+    );
+  }
 
+  // 기존 혹은 새 매칭 결과가 있을 때
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6">
       <div className="flex flex-col items-center justify-center">
@@ -37,25 +45,20 @@ export default function MatchingPage() {
       </div>
 
       <ul className="w-full flex items-center justify-center gap-6">
-        {/* {data.results.map((match, idx) => (
-          <li key={idx}>
-            <MatchProfileCard data={match} />
-          </li>
-        ))} */}
-
-        {dummyResults.map((match, idx) => (
+        {data.results.slice(0, 3).map((match, idx) => (
           <li key={idx}>
             <MatchProfileCard data={match} />
           </li>
         ))}
       </ul>
 
-      <button className="flex items-center justify-center gap-2 rounded-[15px] bg-main min-w-[296px] min-h-[65px]">
-        <img src="/rematch.svg" alt="" className="w-[26px] h-[24px]" />
-        <span className="text-white text-16 font-bold w-min-[296px] h-min-[65px]">
-          다음 룸메이트 보기
-        </span>
-      </button>
+      <Button
+        onClick={() => rematch("normal")}
+        className="flex items-center justify-center gap-2 rounded-[15px] bg-main min-w-[296px] min-h-[65px]"
+      >
+        <img src="/rematch.svg" alt="재 매칭" className="w-[26px] h-[24px]" />
+        다음 룸메이트 보기
+      </Button>
     </div>
   );
 }
