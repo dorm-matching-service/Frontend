@@ -2,20 +2,20 @@
 
 import { useRouter } from "next/navigation";
 
-import { fetchMatchingResult } from "@/apis/matching";
-
 import Button from "@/components/ui/Button";
 
-export default function NoMatchingResult() {
+interface NoMatchingResultProps {
+  onRelaxedRematch: () => void;
+}
+
+
+export default function NoMatchingResult({ onRelaxedRematch }: NoMatchingResultProps) {
   const router = useRouter();
 
   const goToHome = () => {
     router.push("/");
   };
 
-  const relaxedMatching = async () => {
-    await fetchMatchingResult("relaxed");
-  };
 
   return (
     <div className="flex flex-col items-center justify-center gap-3">
@@ -35,7 +35,7 @@ export default function NoMatchingResult() {
           메인 홈으로 가기
         </Button>
 
-        <Button variant="primary" onClick={relaxedMatching}>
+        <Button variant="primary" onClick={onRelaxedRematch}>
           재매칭 시작
         </Button>
       </div>
