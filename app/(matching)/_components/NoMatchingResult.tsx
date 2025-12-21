@@ -2,14 +2,19 @@
 
 import { useRouter } from "next/navigation";
 
+import { fetchMatchingResult } from "@/apis/matching";
+
 import Button from "@/components/ui/Button";
 
 export default function NoMatchingResult() {
-
-    const router = useRouter();
+  const router = useRouter();
 
   const goToHome = () => {
     router.push("/");
+  };
+
+  const relaxedMatching = async () => {
+    await fetchMatchingResult("relaxed");
   };
 
   return (
@@ -19,14 +24,20 @@ export default function NoMatchingResult() {
         매칭률이 조금 낮은 사람과 먼저 연결해볼까요?
       </p>
 
-      <img src="/nomatchingresult.svg" alt="매칭 결과 없음 아이콘" className="w-[181px] h-[181px]" />
+      <img
+        src="/nomatchingresult.svg"
+        alt="매칭 결과 없음 아이콘"
+        className="w-[181px] h-[181px]"
+      />
 
       <div className="flex gap-8">
         <Button variant="secondary" onClick={goToHome}>
           메인 홈으로 가기
         </Button>
 
-        <Button variant="primary">재매칭 시작</Button>
+        <Button variant="primary" onClick={relaxedMatching}>
+          재매칭 시작
+        </Button>
       </div>
     </div>
   );
