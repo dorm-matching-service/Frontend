@@ -2,6 +2,9 @@ export type MatchingMode = "normal" | "relaxed";
 
 // 프론트 - 매칭 카드
 export interface MatchingCardItem {
+  userId: string;
+  isLiked: boolean;
+
   matchingScore: number;
   major: string;
   age: number;

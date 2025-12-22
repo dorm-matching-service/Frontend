@@ -8,7 +8,7 @@ import NoMatchingResult from "../_components/NoMatchingResult";
 import Button from "@/components/ui/Button";
 
 export default function MatchingPage() {
-  const { data, loading, error, rematch } = useMatching();
+  const { data, loading, error, rematch, setData } = useMatching();
 
   if (loading) {
     return <div>매칭 중...</div>;
@@ -22,13 +22,22 @@ export default function MatchingPage() {
     return <div>매칭 데이터를 불러오지 못했습니다.</div>;
   }
 
+  const handleLikeChange = (userId: string, liked: boolean) => {
+    setData((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        results: prev.results.map((item) =>
+          item.userId === userId ? { ...item, isLiked: liked } : item
+        ),
+      };
+    });
+  };
+
   // 매칭 로직 실행했는데 결과가 0 일 때 NoMatchingResult 띄움
   if (data.count === 0) {
-    return (
-       <NoMatchingResult
-      onRelaxedRematch={() => rematch("relaxed")}
-    />
-    );
+    return <NoMatchingResult onRelaxedRematch={() => rematch("relaxed")} />;
   }
 
   // 기존 혹은 새 매칭 결과가 있을 때
@@ -45,9 +54,9 @@ export default function MatchingPage() {
       </div>
 
       <ul className="w-full flex items-center justify-center gap-6">
-        {data.results.slice(0, 3).map((match, idx) => (
-          <li key={idx}>
-            <MatchProfileCard data={match} />
+        {data.results.slice(0, 3).map((match) => (
+          <li key={match.userId}>
+            <MatchProfileCard data={match} onLikeChange={handleLikeChange} />
           </li>
         ))}
       </ul>

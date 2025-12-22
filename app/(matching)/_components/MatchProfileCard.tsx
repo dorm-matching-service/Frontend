@@ -1,13 +1,25 @@
 import PreferenceTag from "./PreferenceTag";
+
 import type { MatchingCardItem } from "@/types/matching";
+
+import { useLikeToggle } from "@/hooks/like/useLikeToggle";
 
 interface MatchProfileCardProps {
   data: MatchingCardItem;
+  onLikeChange: (userId: string, liked: boolean) => void;
 }
 
-export default function MatchProfileCard({ data }: MatchProfileCardProps) {
+export default function MatchProfileCard({ data, onLikeChange, }: MatchProfileCardProps) {
   const tags = data.tags.slice(0, 5);
 
+  const { liked, loading, toggleLike } = useLikeToggle(data.userId, {
+    initialLiked: data.isLiked,
+    onChange: (liked) => {
+      onLikeChange(data.userId, liked);
+      console.log("찜 상태 변경:", liked);
+      // 👉 여기서 부모 상태 갱신, 카운트 변경 가능
+    },
+  });
   return (
     <div className="shadow-profileCard w-[300px] rounded-[15px] overflow-hidden">
       <div className=" flex flex-col gap-5 px-6 py-6 justify-center">
@@ -25,13 +37,11 @@ export default function MatchProfileCard({ data }: MatchProfileCardProps) {
 
         <div className="flex flex-col">
           {/* 백엔드에서 닉네임 User테이블에 추가하면 이 자리에 p 태그로 유저 닉네임 추가해야함 */}
-          
+
           <p className="font-medium text-16">{`${data.major} ${data.age}살`}</p>
         </div>
 
         <div className="text-gray-900 flex flex-col w-full">
-          
-
           {/* 기상 시간 */}
           <div className="flex items-center gap-2">
             <img
@@ -64,11 +74,17 @@ export default function MatchProfileCard({ data }: MatchProfileCardProps) {
         )}
 
         <div className="w-full flex justify-between">
-          <img
-            src="/like.svg"
-            alt="취침 시간"
-            className="w-[18.05px] h-[15.75px]"
-          />
+          <button
+            onClick={toggleLike}
+            disabled={loading}
+            className="disabled:opacity-50"
+          >
+            <img
+              src={liked ? "/redlike.svg" : "/emptylike.svg"}
+              alt="찜 아이콘"
+              className="w-[18px] h-[16px]"
+            />
+          </button>
 
           <button className="text-15 font-medium text-gray-600">
             자세히 보기 &gt;
