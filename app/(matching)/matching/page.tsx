@@ -54,7 +54,7 @@ export default function MatchingPage() {
 
       <Button
         onClick={() => rematch("normal")}
-        className="flex items-center justify-center gap-2 rounded-[15px] bg-main min-w-[296px] min-h-[65px]"
+        className="flex items-center justify-center gap-2 rounded-[15px] bg-main w-[200px]"
       >
         <img src="/rematch.svg" alt="재 매칭" className="w-[26px] h-[24px]" />
         다음 룸메이트 보기

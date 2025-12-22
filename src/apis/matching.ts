@@ -34,7 +34,7 @@ export async function fetchMatchingResult(mode: MatchingMode = "normal"): Promis
 }
 
 export async function fetchMatchingStatus(): Promise<MatchingStatusResponse> {
-  const url = new URL(`${API_BASE_URL}/matching/result`);
+  const url = new URL(`${API_BASE_URL}/matching/status`);
 
   const res = await fetchWithAuth(url.toString(), {
     method: "GET",
