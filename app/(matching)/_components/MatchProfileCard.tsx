@@ -9,8 +9,8 @@ export default function MatchProfileCard({ data }: MatchProfileCardProps) {
   const tags = data.tags.slice(0, 5);
 
   return (
-    <div className="shadow-profileCard w-full max-w-[319px]">
-      <div className=" flex flex-col gap-2 px-6 py-6 justify-center rounded-[15px]">
+    <div className="shadow-profileCard w-[300px] rounded-[15px] overflow-hidden">
+      <div className=" flex flex-col gap-5 px-6 py-6 justify-center">
         <div className="w-full flex justify-between items-center">
           {/* 매칭 점수를 매칭률로 표현 */}
           <span className="text-main font-bold text-16 ">
@@ -23,24 +23,35 @@ export default function MatchProfileCard({ data }: MatchProfileCardProps) {
           </button>
         </div>
 
-        <div className="text-gray-900 items-start flex flex-col">
+        <div className="flex flex-col">
           {/* 백엔드에서 닉네임 User테이블에 추가하면 이 자리에 p 태그로 유저 닉네임 추가해야함 */}
+          
           <p className="font-medium text-16">{`${data.major} ${data.age}살`}</p>
-          <div className="flex">
+        </div>
+
+        <div className="text-gray-900 flex flex-col w-full">
+          
+
+          {/* 기상 시간 */}
+          <div className="flex items-center gap-2">
             <img
               src="/sun.svg"
               alt="기상 시간"
               className="w-[15.51px] h-[15.51px]"
             />
-            <p>기상 시간 {data.wakeTime}</p>
+            <span className="w-[64px]">기상 시간</span>
+            <span className="tabular-nums">{data.wakeTime}</span>
           </div>
-          <div className="flex">
+
+          {/* 취침 시간 */}
+          <div className="flex items-center gap-2">
             <img
               src="/moon.svg"
               alt="취침 시간"
               className="w-[15.51px] h-[15.51px]"
             />
-            <p>취침시간 {data.sleepTime}</p>
+            <span className="w-[64px]">취침 시간</span>
+            <span className="tabular-nums">{data.sleepTime}</span>
           </div>
         </div>
 
