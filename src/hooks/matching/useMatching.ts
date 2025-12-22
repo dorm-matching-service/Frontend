@@ -29,7 +29,7 @@ export function useMatching() {
   const runInitialMatchingFlow = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       // 기존 매칭 결과 조회
       const status: MatchingStatusResponse = await fetchMatchingStatus();
@@ -82,5 +82,5 @@ export function useMatching() {
     runInitialMatchingFlow();
   }, []);
 
-  return { data, loading, error, rematch };
+  return { data, loading, error, rematch, setData };
 }
