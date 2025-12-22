@@ -25,10 +25,11 @@ export function useMatching() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  setLoading(true);
-  setError(null);
   /** 최초 매칭 화면 진입용: 조회 → 없으면 매칭 */
   const runInitialMatchingFlow = async () => {
+    setLoading(true);
+    setError(null);
+    
     try {
       // 기존 매칭 결과 조회
       const status: MatchingStatusResponse = await fetchMatchingStatus();
