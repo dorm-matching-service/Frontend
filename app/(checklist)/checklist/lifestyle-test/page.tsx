@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { StepTabs } from '@/components/survey/StepTabs';
-import { CheckboxGroup, TextAreaWithPreview, TagInput } from '@/components/survey/QuestionControls';
+import { StepTabs } from 'app/(checklist)/_components/StepTabs';
+import { CheckboxGroup, TextAreaWithPreview, TagInput } from 'app/(checklist)/_components/QuestionControls';
 import { getAccessToken } from 'lib/auth';
 
 

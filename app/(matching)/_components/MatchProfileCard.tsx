@@ -1,96 +1,55 @@
-import PreferenceTag from "./PreferenceTag";
+"use client";
 
 import type { MatchingCardItem } from "@/types/matching";
-
 import { useLikeToggle } from "@/hooks/like/useLikeToggle";
+
+import ProfileBox from "@/components/ui/profile/ProfileBox";
+import ProfileBody from "@/components/ui/profile/ProfileBody";
+
+import MatchProfileHeader from "./MatchProfileHeader";
+import MatchProfileFooter from "./MatchProfileFooter";
 
 interface MatchProfileCardProps {
   data: MatchingCardItem;
   onLikeChange: (userId: string, liked: boolean) => void;
 }
 
-export default function MatchProfileCard({ data, onLikeChange, }: MatchProfileCardProps) {
-  const tags = data.tags.slice(0, 5);
+export default function MatchProfileCard({
+  data,
+  onLikeChange,
+}: MatchProfileCardProps) {
 
   const { liked, loading, toggleLike } = useLikeToggle(data.userId, {
     initialLiked: data.isLiked,
     onChange: (liked) => {
       onLikeChange(data.userId, liked);
       console.log("찜 상태 변경:", liked);
-      // 👉 여기서 부모 상태 갱신, 카운트 변경 가능
+      // 여기서 부모 상태 갱신, 카운트 변경 가능
     },
   });
   return (
-    <div className="shadow-profileCard w-[300px] rounded-[15px] overflow-hidden">
-      <div className=" flex flex-col gap-5 px-6 py-6 justify-center">
-        <div className="w-full flex justify-between items-center">
-          {/* 매칭 점수를 매칭률로 표현 */}
-          <span className="text-main font-bold text-16 ">
-            매칭률 {data.matchingScore}%
-          </span>
+    <ProfileBox>
+      {/* 상단: 매칭률 + 리포트 */}
+      <MatchProfileHeader score={data.matchingScore} />
 
-          {/* 아직 매칭 리포트 버튼 구현 안함 ui만 */}
-          <button className="border-main text-main font-medium text-16 border px-1 py-1 rounded-[15px]">
-            매칭 리포트
-          </button>
-        </div>
+      {/* 중앙: 프로필 정보 */}
+      <ProfileBody
+        major={data.major}
+        age={data.age}
+        wakeTime={data.wakeTime}
+        sleepTime={data.sleepTime}
+        tags={data.tags}
+      />
 
-        <div className="flex flex-col">
-          {/* 백엔드에서 닉네임 User테이블에 추가하면 이 자리에 p 태그로 유저 닉네임 추가해야함 */}
-
-          <p className="font-medium text-16">{`${data.major} ${data.age}살`}</p>
-        </div>
-
-        <div className="text-gray-900 flex flex-col w-full">
-          {/* 기상 시간 */}
-          <div className="flex items-center gap-2">
-            <img
-              src="/sun.svg"
-              alt="기상 시간"
-              className="w-[15.51px] h-[15.51px]"
-            />
-            <span className="w-[64px]">기상 시간</span>
-            <span className="tabular-nums">{data.wakeTime}</span>
-          </div>
-
-          {/* 취침 시간 */}
-          <div className="flex items-center gap-2">
-            <img
-              src="/moon.svg"
-              alt="취침 시간"
-              className="w-[15.51px] h-[15.51px]"
-            />
-            <span className="w-[64px]">취침 시간</span>
-            <span className="tabular-nums">{data.sleepTime}</span>
-          </div>
-        </div>
-
-        {data.tags.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 mt-3">
-            {tags.map((tag) => (
-              <PreferenceTag key={tag} content={tag} />
-            ))}
-          </div>
-        )}
-
-        <div className="w-full flex justify-between">
-          <button
-            onClick={toggleLike}
-            disabled={loading}
-            className="disabled:opacity-50"
-          >
-            <img
-              src={liked ? "/redlike.svg" : "/emptylike.svg"}
-              alt="찜 아이콘"
-              className="w-[18px] h-[16px]"
-            />
-          </button>
-
-          <button className="text-15 font-medium text-gray-600">
-            자세히 보기 &gt;
-          </button>
-        </div>
-      </div>
-    </div>
+      {/* 하단: 찜하기 + 상세보기 */}
+      <MatchProfileFooter
+        liked={liked}
+        loading={loading}
+        onToggleLike={toggleLike}
+        onDetailClick={() => {
+          console.log("상세보기 클릭:", data.userId);
+        }}
+      />
+    </ProfileBox>
   );
 }
