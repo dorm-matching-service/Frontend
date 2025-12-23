@@ -6,25 +6,17 @@ interface TimeRowProps {
   value: string;
 }
 
-export default function TimeRow({
-  icon,
-  label,
-  value,
-}: TimeRowProps) {
+export default function TimeRow({ icon, label, value }: TimeRowProps) {
   return (
     <div className="flex items-center gap-2 w-full">
-      <img
-        src={icon}
-        alt={label}
-        className="w-[15.51px] h-[15.51px]"
-      />
+      <img src={icon} alt={label} className="w-[15.51px] h-[15.51px]" />
 
-      <p className="flex items-center gap-1 text-gray-800 text-14">
-        <span>{label}</span>
-        <span className="inline-block w-[70px] text-right tabular-nums">
+      <div className="flex items-center gap-1 flex-1 min-w-0">
+        <span className="whitespace-nowrap">{label}</span>
+        <span className="w-[70px] text-right tabular-nums shrink-0  whitespace-nowrap">
           {value}
         </span>
-      </p>
+      </div>
     </div>
   );
 }

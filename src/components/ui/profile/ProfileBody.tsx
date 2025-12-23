@@ -17,7 +17,7 @@ export default function ProfileBody({
   tags,
 }: ProfileBodyProps) {
   return (
-    <div className="flex flex-coll gap-4">
+    <div className="flex flex-col gap-4">
       {/* 전공 + 나이 */}
       <p className="font-medium text-16 text-gray-900">
         {major} {age} 살
