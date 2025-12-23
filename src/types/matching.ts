@@ -23,3 +23,17 @@ export interface MatchingResponse {
 export interface MatchingStatusResponse extends MatchingResponse {
   hasResult: boolean;
 }
+
+// 지난 매칭 조회 결과
+export interface PastMatchingCard {
+  targetUserId: string;
+  isLiked: boolean;
+  major: string;
+  age: number;
+  wakeTime: string;
+  sleepTime: string;
+  tags: string[];
+}
+
+
+export type PastMatchingHistoryResponse = PastMatchingCard[];
