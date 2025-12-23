@@ -12,6 +12,22 @@ export interface MyLikeCountResponse {
   count: number;
 }
 
+// 내가 찜한 유저 카드 타입
+//나중에 TanStack Query, pagination, { cards: MyLikedCard[] } 구조로 바꿀 때를 위한 변경 범위 최소화
+export interface MyLikedCard {
+  targetUserId: string;
+  isLiked: boolean;
+
+  major: string;
+  age: number;
+  wakeTime: string;
+  sleepTime: string;
+  tags: string[];
+}
+
+// 내가 찜한 유저 카드 목록 응답 타입
+export type MyLikedCardsResponse = MyLikedCard[];
+
 /* ===== 좋아요 토글 ===== */
 export async function toggleLike(
   toUserId: string
@@ -39,6 +55,19 @@ export async function getMyLikeCount(): Promise<MyLikeCountResponse> {
 
   if (!res.ok) {
     throw new Error("좋아요 개수 조회 실패");
+  }
+
+  return res.json();
+}
+
+/* ===== 내가 찜한 유저 카드 목록 조회 ===== */
+export async function getMyLikedCards(): Promise<MyLikedCardsResponse> {
+  const res = await fetchWithAuth(`${API_BASE_URL}/likes/cards`, {
+    method: "GET",
+  });
+
+  if (!res.ok) {
+    throw new Error("찜한 유저 카드 조회 실패");
   }
 
   return res.json();
