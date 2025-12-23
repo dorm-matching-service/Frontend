@@ -7,7 +7,7 @@ import ProfileBox from "@/components/ui/profile/ProfileBox";
 import ProfileBody from "@/components/ui/profile/ProfileBody";
 
 import MatchProfileHeader from "./MatchProfileHeader";
-import MatchProfileFooter from "./MatchProfileFooter";
+import MatchProfileFooter from "../../../../src/components/ui/profile/ProfileFooter";
 
 interface MatchProfileCardProps {
   data: MatchingCardItem;

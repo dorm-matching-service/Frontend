@@ -2,8 +2,8 @@
 
 import { useMatching } from "@/hooks/matching/useMatching";
 
-import MatchProfileCard from "../_components/MatchProfileCard";
-import NoMatchingResult from "../_components/NoMatchingResult";
+import MatchProfileCard from "./_components/MatchProfileCard";
+import NoMatchingResult from "./_components/NoMatchingResult";
 
 import Button from "@/components/ui/Button";
 

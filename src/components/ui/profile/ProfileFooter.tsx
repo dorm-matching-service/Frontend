@@ -7,7 +7,7 @@ interface MatchProfileFooterProps {
   onDetailClick?: () => void;
 }
 
-export default function MatchProfileFooter({
+export default function ProfileFooter({
   liked,
   loading = false,
   onToggleLike,
