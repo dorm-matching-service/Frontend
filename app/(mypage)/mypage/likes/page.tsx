@@ -10,19 +10,22 @@ export default function LikesPage() {
   if (error) return <div>에러 발생</div>;
 
   return (
-    <ul>
-      {cards.map((card) => (
-        <MyProfileCard
-          key={card.targetUserId}
-          targetUserId={card.targetUserId}
-          user={card}
-          onUnlike={(targetUserId) => {
-            setCards((prev) =>
-              prev.filter((c) => c.targetUserId !== targetUserId)
-            );
-          }}
-        />
-      ))}
-    </ul>
+    <div className="min-h-screen flex justify-center items-center">
+      <ul className="flex gap-6">
+        {cards.map((card) => (
+          <li key={card.targetUserId}>
+            <MyProfileCard
+              targetUserId={card.targetUserId}
+              user={card}
+              onUnlike={(targetUserId) => {
+                setCards((prev) =>
+                  prev.filter((c) => c.targetUserId !== targetUserId)
+                );
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
