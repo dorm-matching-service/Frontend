@@ -36,4 +36,7 @@ export interface PastMatchingCard {
 }
 
 
-export type PastMatchingHistoryResponse = PastMatchingCard[];
+export interface PastMatchingHistoryResponse {
+  count: number;
+  results: PastMatchingCard[];
+}

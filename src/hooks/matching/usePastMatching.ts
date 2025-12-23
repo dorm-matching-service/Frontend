@@ -1,14 +1,12 @@
 "use client";
 
-
 import { useEffect, useState } from "react";
 
 import { fetchPastMatchingHistory } from "@/apis/matching";
-
-import type { PastMatchingHistoryResponse } from "@/types/matching";
+import type { PastMatchingCard } from "@/types/matching";
 
 export function usePastMatchingHistory() {
-  const [cards, setCards] = useState<PastMatchingHistoryResponse>([]);
+  const [cards, setCards] = useState<PastMatchingCard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -17,7 +15,8 @@ export function usePastMatchingHistory() {
       try {
         setLoading(true);
         const res = await fetchPastMatchingHistory();
-        setCards(res);
+
+        setCards(res.results);
         setError(null);
       } catch (err) {
         console.error("과거 매칭 기록 조회 실패", err);
