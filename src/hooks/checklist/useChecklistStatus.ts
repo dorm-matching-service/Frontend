@@ -11,23 +11,28 @@ export function useChecklistStatus() {
     let mounted = true;
 
     fetchChecklistStatus()
-    .then((res) => {
-        if(!mounted) return;
+      .then((res) => {
+        if (!mounted) return;
+        console.log("체크리스트 여부 API", res);
+        console.log(
+          "checklist hook env",
+          typeof window === "undefined" ? "SERVER" : "CLIENT"
+        );
         setHasChecklist(res.exists);
-    })
-    .catch((err) => {
-        setError(err);
+      })
+      .catch((err) => {
+        console.error("checklist api error", err);
+        setError(String(err));
         setHasChecklist(false);
-    })
-    .finally(() => {
+      })
+      .finally(() => {
         if (!mounted) return;
         setLoading(false);
-    });
+      });
 
     return () => {
-        mounted = false;
+      mounted = false;
     };
-
   }, []);
 
   return { hasChecklist, loading, error };

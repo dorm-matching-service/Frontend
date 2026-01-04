@@ -31,6 +31,8 @@ export async function fetchChecklistStatus(): Promise<MySurveyResponse> {
       method: "GET",
     }
   );
+ 
+
 
   if (!res.ok) {
     throw new Error("체크리스트 조회 실패");
