@@ -1,16 +1,22 @@
 // src/lib/fetchWithAuth.ts
-export async function fetchWithAuth(
-  url: string,
-  options: RequestInit = {}
-) {
+export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const token = localStorage.getItem("access_token");
+
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   const res = await fetch(url, {
     ...options,
-    headers: {
-      ...options.headers,
-      Authorization: token ? `Bearer ${token}` : "",
-    },
+
+    // fetch 레벨 캐시 차단
+    cache: "no-store",
+
+    headers,
   });
 
   if (res.status === 401) {

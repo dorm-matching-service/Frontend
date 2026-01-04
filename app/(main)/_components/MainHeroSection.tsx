@@ -9,15 +9,9 @@ export default function MainHeroSection() {
   const { hasChecklist, loading } = useChecklistStatus();
 
   const handleClick = () => {
-    if (loading) return;
+    if (loading || hasChecklist === null) return;
 
-    if (hasChecklist) {
-      //체크리스트 완료 → 매칭 페이지
-      router.push("/matching");
-    } else {
-      //미완료 → 체크리스트 페이지
-      router.push("/checklist");
-    }
+    router.push(hasChecklist ? "/matching" : "/checklist");
   };
   return (
     <div className="flex flex-col items-center justify-center gap-1 py-20 min-h-[1100px]">
