@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useMatching } from "@/hooks/matching/useMatching";
 
 import MatchProfileCard from "./_components/MatchProfileCard";
@@ -8,7 +10,15 @@ import NoMatchingResult from "./_components/NoMatchingResult";
 import Button from "@/components/ui/Button";
 
 export default function MatchingPage() {
-  const { data, loading, error, rematch, setData } = useMatching();
+  const router = useRouter();
+
+  const { data, loading, error, rematch, setData, blockedByChecklist } = useMatching();
+
+  // 체크리스트가 없으면 체크리스트 페이지로 리다이렉트
+  if (blockedByChecklist) {
+    router.replace("/checklist");
+    return null;
+  }
 
   if (loading) {
     return <div>매칭 중...</div>;
@@ -21,6 +31,7 @@ export default function MatchingPage() {
   if (!data) {
     return <div>매칭 데이터를 불러오지 못했습니다.</div>;
   }
+
 
   const handleLikeChange = (userId: string, liked: boolean) => {
     setData((prev) => {
