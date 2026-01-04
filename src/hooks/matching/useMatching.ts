@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 
 // api 임포트
 import { fetchMatchingStatus, fetchMatchingResult } from "@/apis/matching";
+import { fetchChecklistStatus } from "@/apis/checklist";
 
 // 타입 임포트
 import type {
@@ -21,6 +22,8 @@ import type {
 } from "@/types/matching";
 
 export function useMatching() {
+  const [blockedByChecklist, setBlockedByChecklist] = useState(false);
+
   const [data, setData] = useState<MatchingResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +34,16 @@ export function useMatching() {
     setError(null);
 
     try {
+      // 체크리스트 작성 여부 확인
+      const checklistRes = await fetchChecklistStatus();
+
+      // 체크리스트가 없으면 매칭 로직 실행하지 않음
+      if (!checklistRes.exists) {
+         setBlockedByChecklist(true);
+        // data를 null로 유지 (페이지 쪽에서 checklist로 보내거나 처리)
+        return;
+      }
+
       // 기존 매칭 결과 조회
       const status: MatchingStatusResponse = await fetchMatchingStatus();
 
@@ -82,5 +95,5 @@ export function useMatching() {
     runInitialMatchingFlow();
   }, []);
 
-  return { data, loading, error, rematch, setData };
+  return { data, loading, error, rematch, setData, blockedByChecklist };
 }

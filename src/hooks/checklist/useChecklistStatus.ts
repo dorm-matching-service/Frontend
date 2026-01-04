@@ -13,7 +13,7 @@ export function useChecklistStatus() {
     fetchChecklistStatus()
     .then((res) => {
         if(!mounted) return;
-        setHasChecklist(res.hasChecklist);
+        setHasChecklist(res.exists);
     })
     .catch((err) => {
         setError(err);
