@@ -48,7 +48,7 @@ export async function patchMySurvey(
   data: Partial<LifestyleSurvey>
 ): Promise<PatchSurveyResponse> {
   const res = await fetchWithAuth(
-    `${API_BASE_URL}/lifestyle-survey/me`,
+    `${API_BASE_URL}/lifestyle-survey`,
     {
       method: "PATCH",
       headers: {
