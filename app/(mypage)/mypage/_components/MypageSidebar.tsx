@@ -2,6 +2,7 @@
 
 import { useMySurveySummary } from "@/hooks/mypage/useMySurveySummary";
 import MyProfileCard from "./MyProfileCard";
+import MyPageMenu from "./MyPageMenu";
 
 export default function MyPageSidebar() {
   const { loading, error, summary } = useMySurveySummary();
@@ -20,7 +21,7 @@ export default function MyPageSidebar() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col space-y-6">
       {summary?.survey && (
         <MyProfileCard
           data={{
@@ -32,6 +33,8 @@ export default function MyPageSidebar() {
           }}
         />
       )}
+
+      <MyPageMenu />
     </div>
   );
 }

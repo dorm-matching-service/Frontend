@@ -11,9 +11,9 @@ interface ButtonProps {
 
 const variantStyles: Record<string, string> = {
   primary: `
-    min-w-[311px]
-    px-8 py-4
-    text-24 font-bold
+    flex items-center justify-center text-18
+    w-full
+    font-bold
     bg-main text-white
     active:scale-95
 

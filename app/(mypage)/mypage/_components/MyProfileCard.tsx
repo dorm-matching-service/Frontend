@@ -34,7 +34,7 @@ export default function MyProfileCard({ data }: MyProfileCardProps) {
         tags={data.tags}
       />
 
-      <Button variant="primary" onClick={handleClick}>
+      <Button variant="primary" onClick={handleClick} className="w-full h-[50px] text-18">
         상세보기
       </Button>
     </ProfileBox>
