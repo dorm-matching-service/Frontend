@@ -46,9 +46,10 @@ export default function MatchProfileCard({
         liked={liked}
         loading={loading}
         onToggleLike={toggleLike}
-        onDetailClick={() => {
+        onActionClick={() => {
           console.log("상세보기 클릭:", data.userId);
         }}
+        actionLabel="상세보기 클릭"
       />
     </ProfileBox>
   );

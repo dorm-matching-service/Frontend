@@ -15,9 +15,10 @@ export interface MyLikeCountResponse {
 // 내가 찜한 유저 카드 타입
 //나중에 TanStack Query, pagination, { cards: MyLikedCard[] } 구조로 바꿀 때를 위한 변경 범위 최소화
 export interface MyLikedCard {
-  targetUserId: string;
+  userId: string;
   isLiked: boolean;
 
+  matchingScore: number;
   major: string;
   age: number;
   wakeTime: string;
