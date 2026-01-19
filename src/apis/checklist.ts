@@ -18,21 +18,15 @@ export interface MySurveyResponse {
   survey: LifestyleSurvey | null;
 }
 
-
 export interface PatchSurveyResponse {
   success: boolean;
   survey: LifestyleSurvey;
 }
 
 export async function fetchChecklistStatus(): Promise<MySurveyResponse> {
-  const res = await fetchWithAuth(
-    `${API_BASE_URL}/lifestyle-survey/me`,
-    {
-      method: "GET",
-    }
-  );
- 
-
+  const res = await fetchWithAuth(`${API_BASE_URL}/lifestyle-survey/me`, {
+    method: "GET",
+  });
 
   if (!res.ok) {
     throw new Error("체크리스트 조회 실패");
@@ -47,16 +41,13 @@ export async function fetchChecklistStatus(): Promise<MySurveyResponse> {
 export async function patchMySurvey(
   data: Partial<LifestyleSurvey>
 ): Promise<PatchSurveyResponse> {
-  const res = await fetchWithAuth(
-    `${API_BASE_URL}/lifestyle-survey`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
+  const res = await fetchWithAuth(`${API_BASE_URL}/lifestyle-survey`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 
   if (!res.ok) {
     throw new Error("체크리스트 수정 실패");
@@ -65,21 +56,16 @@ export async function patchMySurvey(
   return res.json();
 }
 
-
-
 export interface MySurveySummaryResponse {
-  // 기본 정보
-  age: number | null;
-  department: string | null;
-
-  // 카드에 필요한 필드 추가
-  wakeTime: string | null;
-  sleepTime: string | null;
-  tags: string[];
-
-  mbti?: string;
+  exists: boolean;
+  survey: {
+    age: number | null;
+    department: string | null;
+    wakeTime: string | null;
+    sleepTime: string | null;
+    tags: string[];
+  } | null;
 }
-
 /* ===== 유저 설문 요약 조회 ===== */
 export async function fetchMySurveySummary(): Promise<MySurveySummaryResponse> {
   const res = await fetchWithAuth(
