@@ -1,7 +1,6 @@
 "use client";
 
 import { useMySurveySummary } from "@/hooks/mypage/useMySurveySummary";
-import MyPageMenu from "./MyPageMenu";
 import MyProfileCard from "./MyProfileCard";
 
 export default function MyPageSidebar() {
@@ -22,16 +21,17 @@ export default function MyPageSidebar() {
 
   return (
     <div className="space-y-6">
-     <MyProfileCard
-        data={{
-          major: summary.department ?? "",
-          age: summary.age ?? 0,
-          wakeTime: summary.wakeTime ?? "",
-          sleepTime: summary.sleepTime ?? "",
-          tags: summary.tags ?? [],
-        }}
-      />
-      <MyPageMenu />
+      {summary?.survey && (
+        <MyProfileCard
+          data={{
+            major: summary.survey.department ?? "",
+            age: summary.survey.age ?? 0,
+            wakeTime: summary.survey.wakeTime ?? "",
+            sleepTime: summary.survey.sleepTime ?? "",
+            tags: summary.survey.tags ?? [],
+          }}
+        />
+      )}
     </div>
   );
 }
