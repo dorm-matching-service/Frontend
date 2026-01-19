@@ -6,8 +6,6 @@ import { useMyLikedCards } from "@/hooks/like/useMyLikedCards";
 import SummaryCardSection from "./_components/SummaryCardSection";
 import InterestedProfileSection from "./_components/InterestedProfileSection";
 
-import type { MatchingResponse } from "@/types/matching";
-
 export default function MyPage() {
   // 좋아요 카드 목록
   const { cards: likedCards, setCards: setLikedCards } = useMyLikedCards();
@@ -31,19 +29,7 @@ export default function MyPage() {
     return <div>마이페이지 데이터를 불러오지 못했어요.</div>;
   }
 
-  const interestedProfileData: MatchingResponse = {
-    count: likedCards.length,
-    results: likedCards.slice(0, 3).map((card) => ({
-      userId: card.userId,
-      isLiked: card.isLiked, 
-      matchingScore: 0, 
-      major: card.major,
-      age: card.age,
-      wakeTime: card.wakeTime,
-      sleepTime: card.sleepTime,
-      tags: card.tags,
-    })),
-  };
+  
 
   return (
     <div className="min-h-screen flex flex-col gap-8">
@@ -56,7 +42,7 @@ export default function MyPage() {
       />
 
       <InterestedProfileSection
-        data={interestedProfileData}
+        profiles={likedCards}
         onLikeChange={handleLikeChange}
       />
     </div>
