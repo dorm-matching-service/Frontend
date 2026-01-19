@@ -26,7 +26,7 @@ export interface MatchingStatusResponse extends MatchingResponse {
 
 // 지난 매칭 조회 결과
 export interface PastMatchingCard {
-  targetUserId: string;
+  userId: string;
   isLiked: boolean;
   major: string;
   age: number;
@@ -39,4 +39,8 @@ export interface PastMatchingCard {
 export interface PastMatchingHistoryResponse {
   count: number;
   results: PastMatchingCard[];
+}
+
+export interface PastMatchingCountResponse {
+  count: number;
 }

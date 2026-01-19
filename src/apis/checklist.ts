@@ -64,3 +64,34 @@ export async function patchMySurvey(
 
   return res.json();
 }
+
+
+
+export interface MySurveySummaryResponse {
+  // 기본 정보
+  age: number | null;
+  department: string | null;
+
+  // 카드에 필요한 필드 추가
+  wakeTime: string | null;
+  sleepTime: string | null;
+  tags: string[];
+
+  mbti?: string;
+}
+
+/* ===== 유저 설문 요약 조회 ===== */
+export async function fetchMySurveySummary(): Promise<MySurveySummaryResponse> {
+  const res = await fetchWithAuth(
+    `${API_BASE_URL}/lifestyle-survey/me/summary`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("설문 요약 조회 실패");
+  }
+
+  return res.json();
+}
