@@ -16,6 +16,7 @@ export default function ProfileBody({
   sleepTime,
   tags,
 }: ProfileBodyProps) {
+
   return (
     <div className="flex flex-col gap-4">
       {/* 전공 + 나이 */}

@@ -10,7 +10,7 @@ export default function MypageLayout({ children }: MypageLayoutProps) {
       <aside className="w-[320px] shrink-0 p-6">
         <MyPageSidebar />
       </aside>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 p-6">{children}</main>
     </div>
   );
 }
