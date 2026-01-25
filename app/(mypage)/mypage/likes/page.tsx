@@ -1,9 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useMyLikedCards } from "@/hooks/like/useMyLikedCards";
 import MyPageProfileCard from "../_components/MyPageProfileCard";
 
 export default function LikesPage() {
+  const router = useRouter();
   const { cards, loading, error, setCards } = useMyLikedCards();
 
   if (loading) return <div>로딩 중...</div>;
@@ -15,6 +18,9 @@ export default function LikesPage() {
       setCards((prev) => prev.filter((c) => c.userId !== userId));
     }
   };
+  const handleGoDetail = (targetUserId: string) => {
+    router.push(`/mypage/profile/${targetUserId}`);
+  };
 
   return (
     <div className="min-h-screen flex justify-center items-center">
@@ -25,9 +31,7 @@ export default function LikesPage() {
               data={card}
               onLikeChange={handleLikeChange}
               actionLabel="상세보기"
-              onActionClick={(userId) => {
-                console.log("상세보기:", userId);
-              }}
+              onActionClick={handleGoDetail}
             />
           </li>
         ))}

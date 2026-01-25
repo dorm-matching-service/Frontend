@@ -23,6 +23,12 @@ export interface PatchSurveyResponse {
   survey: LifestyleSurvey;
 }
 
+export interface UserWholeSurveyResponse {
+  exists: boolean;
+  survey: LifestyleSurvey | null;
+  isLiked: boolean;
+}
+
 export async function fetchChecklistStatus(): Promise<MySurveyResponse> {
   const res = await fetchWithAuth(`${API_BASE_URL}/lifestyle-survey/me`, {
     method: "GET",
@@ -39,7 +45,7 @@ export async function fetchChecklistStatus(): Promise<MySurveyResponse> {
  * 유저 라이프스타일 설문 부분 수정
  */
 export async function patchMySurvey(
-  data: Partial<LifestyleSurvey>
+  data: Partial<LifestyleSurvey>,
 ): Promise<PatchSurveyResponse> {
   const res = await fetchWithAuth(`${API_BASE_URL}/lifestyle-survey`, {
     method: "PATCH",
@@ -72,11 +78,29 @@ export async function fetchMySurveySummary(): Promise<MySurveySummaryResponse> {
     `${API_BASE_URL}/lifestyle-survey/me/summary`,
     {
       method: "GET",
-    }
+    },
   );
 
   if (!res.ok) {
     throw new Error("설문 요약 조회 실패");
+  }
+
+  return res.json();
+}
+
+/* ===== 유저 설문 전체 조회 ===== */
+export async function fetchUserSurvey(
+  targetUserId: string,
+): Promise<UserWholeSurveyResponse> {
+  const res = await fetchWithAuth(
+    `${API_BASE_URL}/lifestyle-survey/profile/${targetUserId}/survey`,
+    {
+      method: "GET",
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("유저 설문 조회 실패");
   }
 
   return res.json();
