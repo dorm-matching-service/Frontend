@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useMyLikedCards } from "@/hooks/like/useMyLikedCards";
+import { useMyLikedCards } from "@src/hooks/like/useMyLikedCards";
 import MyPageProfileCard from "../_components/MyPageProfileCard";
 
 export default function LikesPage() {
@@ -19,7 +19,7 @@ export default function LikesPage() {
     }
   };
   const handleGoDetail = (targetUserId: string) => {
-    router.push(`/mypage/profile/${targetUserId}`);
+    router.push(`/profile/${targetUserId}`);
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { usePastMatchingHistory } from "@/hooks/matching/usePastMatching";
+import { usePastMatchingHistory } from "@src/hooks/matching/usePastMatching";
 import MyPageProfileCard from "../_components/MyPageProfileCard";
 
 export default function HistoryPage() {
@@ -18,7 +18,7 @@ export default function HistoryPage() {
     }
   };
   const handleGoDetail = (targetUserId: string) => {
-    router.push(`/mypage/profile/${targetUserId}`);
+    router.push(`/profile/${targetUserId}`);
   };
 
   return (

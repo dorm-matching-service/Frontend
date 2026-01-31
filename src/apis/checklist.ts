@@ -3,7 +3,7 @@ import { fetchWithAuth } from "lib/fetchWithAuth";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-import { LifestyleSurvey } from "@/types/LifestyleSurvey";
+import { LifestyleSurvey } from "@src/types/LifestyleSurvey";
 
 /**
  * 백엔드 응답과 동일한 형태
