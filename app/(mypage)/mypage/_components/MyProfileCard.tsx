@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-import ProfileBox from "@/components/ui/profile/ProfileBox";
-import ProfileBody from "@/components/ui/profile/ProfileBody";
+import ProfileBox from "@src/components/ui/profile/ProfileBox";
+import ProfileBody from "@src/components/ui/profile/ProfileBody";
 
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 
 export interface MyProfileCardItem {
   major: string;

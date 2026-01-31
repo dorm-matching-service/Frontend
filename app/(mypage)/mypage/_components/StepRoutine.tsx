@@ -1,9 +1,9 @@
 import TimePicker from "./TimePicker";
-import type { LifestyleSurvey } from "@/types/LifestyleSurvey";
+import type { LifestyleSurvey } from "@src/types/LifestyleSurvey";
 import {
   convertTimeTextToMinutes,
   convertMinutesToTimeText,
-} from "@/utils/time";
+} from "@src/utils/time";
 
 type Props = {
   formState: Partial<LifestyleSurvey>;

@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { useMe } from "@/hooks/user/useMe";
-import { usePrivacyConsent } from "@/hooks/auth/usePrivacyConsent";
+import { useMe } from "@src/hooks/user/useMe";
+import { usePrivacyConsent } from "@src/hooks/auth/usePrivacyConsent";
 
 import AuthBox from "../../../_components/AuthBox";
-import AuthButton from "@/components/ui/Button";
+import AuthButton from "@src/components/ui/Button";
 
 import AgreementAllCheck from "./_components/AgreementAllCheck";
 import AgreementItem from "./_components/AgreementItem";

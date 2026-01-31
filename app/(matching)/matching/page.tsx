@@ -1,11 +1,12 @@
 "use client";
 
-import { useMatching } from "@/hooks/matching/useMatching";
+import { useMatching } from "@src/hooks/matching/useMatching";
 
 import MatchProfileCard from "./_components/MatchProfileCard";
 import NoMatchingResult from "./_components/NoMatchingResult";
 
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
+
 
 export default function MatchingPage() {
 

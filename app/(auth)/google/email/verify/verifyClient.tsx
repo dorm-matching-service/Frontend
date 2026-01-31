@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
-import useEmailVerify from "@/hooks/auth/useEmailVerify";
+import useEmailVerify from "@src/hooks/auth/useEmailVerify";
 
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 import AuthInput from "../../../_components/AuthInput";
 import AuthBox from "../../../_components/AuthBox";
 import AuthPopup from "../../../_components/AuthPopup";

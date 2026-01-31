@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { fetchPastMatchingHistory } from "@/apis/matching";
-import type { PastMatchingCard } from "@/types/matching";
+import { fetchPastMatchingHistory } from "@src/apis/matching";
+import type { PastMatchingCard } from "@src/types/matching";
 
 export function usePastMatchingHistory() {
   const [cards, setCards] = useState<PastMatchingCard[]>([]);

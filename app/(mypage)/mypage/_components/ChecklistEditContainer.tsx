@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 import { StepTabs } from "app/(checklist)/_components/StepTabs";
-import { useChecklistOrchestrator } from "@/hooks/checklist/useChecklistOrchestrator";
+import { useChecklistOrchestrator } from "@src/hooks/checklist/useChecklistOrchestrator";
 
 import StepBasicInfo from "./StepBasicInfo";
 import StepRoutine from "./StepRoutine";

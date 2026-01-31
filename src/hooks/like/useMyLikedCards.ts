@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getMyLikedCards } from "@/apis/like";
-import type { MyLikedCard } from "@/apis/like";
+import { getMyLikedCards } from "@src/apis/like";
+import type { MyLikedCard } from "@src/apis/like";
 
 export function useMyLikedCards() {
   const [cards, setCards] = useState<MyLikedCard[]>([]);

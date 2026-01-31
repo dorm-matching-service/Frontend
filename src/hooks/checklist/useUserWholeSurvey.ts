@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchUserSurvey } from "@/apis/checklist";
-import type { LifestyleSurvey } from "@/types/LifestyleSurvey";
+import { fetchUserSurvey } from "@src/apis/checklist";
+import type { LifestyleSurvey } from "@src/types/LifestyleSurvey";
 
 export function useUserWholeSurvey(userId: string) {
   const [survey, setSurvey] = useState<LifestyleSurvey | null>(null);

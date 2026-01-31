@@ -4,7 +4,7 @@ import type {
   LifestyleSurvey,
   OutgoingFreq,
   ActivityLevel,
-} from "@/types/LifestyleSurvey";
+} from "@src/types/LifestyleSurvey";
 
 type Props = {
   formState: Partial<LifestyleSurvey>;

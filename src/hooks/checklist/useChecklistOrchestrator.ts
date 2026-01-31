@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { fetchChecklistStatus, patchMySurvey } from "@/apis/checklist";
-import type { PatchSurveyResponse } from "@/apis/checklist";
+import { fetchChecklistStatus, patchMySurvey } from "@src/apis/checklist";
+import type { PatchSurveyResponse } from "@src/apis/checklist";
 
-import { LifestyleSurvey } from "@/types/LifestyleSurvey";
+import { LifestyleSurvey } from "@src/types/LifestyleSurvey";
 
 export function useChecklistOrchestrator() {
   const router = useRouter();
