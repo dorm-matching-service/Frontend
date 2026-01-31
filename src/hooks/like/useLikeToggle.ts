@@ -1,6 +1,6 @@
 // hooks/like/useLikeToggle.ts
 import { useState } from "react";
-import { toggleLike } from "@/apis/like";
+import { toggleLike } from "@src/apis/like";
 
 interface UseLikeToggleOptions {
   initialLiked?: boolean;

@@ -1,5 +1,5 @@
 import React from "react";
-import type { LifestyleSurvey, EI, NS, TF, JP } from "@/types/LifestyleSurvey";
+import type { LifestyleSurvey, EI, NS, TF, JP } from "@src/types/LifestyleSurvey";
 
 
 type Props = {

@@ -11,14 +11,14 @@
 import { useEffect, useState } from "react";
 
 // api 임포트
-import { fetchMatchingStatus, fetchMatchingResult } from "@/apis/matching";
+import { fetchMatchingStatus, fetchMatchingResult } from "@src/apis/matching";
 
 // 타입 임포트
 import type {
   MatchingResponse,
   MatchingStatusResponse,
   MatchingMode,
-} from "@/types/matching";
+} from "@src/types/matching";
 
 export function useMatching() {
   const [data, setData] = useState<MatchingResponse | null>(null);

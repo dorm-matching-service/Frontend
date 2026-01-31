@@ -1,7 +1,7 @@
 "use client";
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 import { useRouter } from "next/navigation";
-import { useChecklistStatus } from "@/hooks/checklist/useChecklistStatus";
+import { useChecklistStatus } from "@src/hooks/checklist/useChecklistStatus";
 
 export default function MainHeroSection() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import MyPageProfileCard from "./MyPageProfileCard";
-import { LikedProfileCard } from "@/types/like";
+import { LikedProfileCard } from "@src/types/like";
 
 interface InterestedProfileSectionProps {
  profiles: LikedProfileCard[]; 

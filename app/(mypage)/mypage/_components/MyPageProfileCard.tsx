@@ -1,10 +1,10 @@
 "use client";
 
-import { useLikeToggle } from "@/hooks/like/useLikeToggle";
+import { useLikeToggle } from "@src/hooks/like/useLikeToggle";
 
-import ProfileBox from "@/components/ui/profile/ProfileBox";
-import ProfileBody from "@/components/ui/profile/ProfileBody";
-import ProfileFooter from "@/components/ui/profile/ProfileFooter";
+import ProfileBox from "@src/components/ui/profile/ProfileBox";
+import ProfileBody from "@src/components/ui/profile/ProfileBody";
+import ProfileFooter from "@src/components/ui/profile/ProfileFooter";
 
 export interface MyPageProfileCardItem {
   userId: string;

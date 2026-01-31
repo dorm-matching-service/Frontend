@@ -1,12 +1,12 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import useEmailStart from "@/hooks/auth/useEmailStart";
+import useEmailStart from "@src/hooks/auth/useEmailStart";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import AuthBox from "../../_components/AuthBox";
 import AuthInput from "../../_components/AuthInput";
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 import AuthPopup from "../../_components/AuthPopup";
 import { useRouter } from "next/navigation";
 

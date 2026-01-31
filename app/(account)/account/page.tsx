@@ -1,7 +1,7 @@
 import AccountSettingItem from "./_components/AccountSettingItem";
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 
-import { useMe } from "@/hooks/user/useMe";
+import { useMe } from "@src/hooks/user/useMe";
 
 export default function AccountPage() {
   const { user, loading, error } = useMe();
@@ -49,7 +49,7 @@ export default function AccountPage() {
         //   </Button>
         // }
       />
-      <AccountSettingItem
+      {/* <AccountSettingItem
         title="회원탈퇴"
         description="계정을 삭제하면 매칭기록과 프로필이 사라져요."
         danger
@@ -62,7 +62,7 @@ export default function AccountPage() {
             탈퇴하기
           </Button>
         }
-      />
+      /> */}
     </div>
   );
 }

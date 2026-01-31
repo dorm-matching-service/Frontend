@@ -1,7 +1,7 @@
 "use client";
 
-import { useMyPageData } from "@/hooks/mypage/useMypageData";
-import { useMyLikedCards } from "@/hooks/like/useMyLikedCards";
+import { useMyPageData } from "@src/hooks/mypage/useMypageData";
+import { useMyLikedCards } from "@src/hooks/like/useMyLikedCards";
 
 import SummaryCardSection from "./_components/SummaryCardSection";
 import InterestedProfileSection from "./_components/InterestedProfileSection";

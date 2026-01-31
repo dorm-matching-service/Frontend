@@ -1,5 +1,6 @@
 import ProfileDetailBox from "./ProfileDetailBox";
-import TagList from "@src/components/ui/profile/TagList";
+import TagList
+ from "@src/components/ui/profile/TagList";
 import ActionButton from "./Button";
 
 interface ProfileDetailHeaderProps {

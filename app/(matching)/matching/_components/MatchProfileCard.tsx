@@ -1,10 +1,10 @@
 "use client";
 
-import type { MatchingCardItem } from "@/types/matching";
-import { useLikeToggle } from "@/hooks/like/useLikeToggle";
+import type { MatchingCardItem } from "@src/types/matching";
+import { useLikeToggle } from "@src/hooks/like/useLikeToggle";
 
-import ProfileBox from "@/components/ui/profile/ProfileBox";
-import ProfileBody from "@/components/ui/profile/ProfileBody";
+import ProfileBox from "@src/components/ui/profile/ProfileBox";
+import ProfileBody from "@src/components/ui/profile/ProfileBody";
 
 import MatchProfileHeader from "./MatchProfileHeader";
 import MatchProfileFooter from "../../../../src/components/ui/profile/ProfileFooter";

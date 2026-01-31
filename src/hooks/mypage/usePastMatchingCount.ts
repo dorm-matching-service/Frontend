@@ -2,7 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { fetchPastMatchingCount } from "@/apis/matching";
+import { fetchPastMatchingCount } from "@src/apis/matching";
 
 export function usePastMatchingCount() {
   const [count, setCount] = useState<number | null>(null);

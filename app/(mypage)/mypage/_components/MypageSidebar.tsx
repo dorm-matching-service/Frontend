@@ -1,6 +1,6 @@
 "use client";
 
-import { useMySurveySummary } from "@/hooks/mypage/useMySurveySummary";
+import { useMySurveySummary } from "@src/hooks/mypage/useMySurveySummary";
 import MyProfileCard from "./MyProfileCard";
 import MyPageMenu from "./MyPageMenu";
 
