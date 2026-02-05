@@ -44,3 +44,13 @@ export interface PastMatchingHistoryResponse {
 export interface PastMatchingCountResponse {
   count: number;
 }
+
+
+export interface MatchStatusResponse {
+  matchStatus: "PENDING" | "MATCHED" | "REJECTED" | null;
+  hasRequested: boolean;
+  canRespond: boolean;
+  canRequest: boolean;
+  hasChatRoom: boolean; 
+  chatRoomId: string | null;
+}

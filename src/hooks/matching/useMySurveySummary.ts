@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchMySurveySummary } from "@/apis/checklist";
-import type { MySurveySummaryResponse } from "@/apis/checklist";
+import { fetchMySurveySummary } from "@src/apis/checklist";
+import type { MySurveySummaryResponse } from "@src/apis/checklist";
 
 export function useMySurveySummary() {
   const [summary, setSummary] = useState<MySurveySummaryResponse | null>(null);
