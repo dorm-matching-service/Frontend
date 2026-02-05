@@ -13,7 +13,7 @@ interface EmailStartOptions {
   onSuccess?: (data: EmailStartResponse, variables: { email: string}) => void;
   onError?: (error: Error) => void;
 }
-import { sendEmail } from "@/apis/auth.email";
+import { sendEmail } from "@src/apis/auth.email";
 export default function useEmailStart(options?: EmailStartOptions) {
 
   //SuccessType = string sendEmail이 문자열을 return 하니까

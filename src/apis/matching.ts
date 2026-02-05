@@ -5,7 +5,8 @@ import type {
   MatchingMode,
   MatchingStatusResponse,
   PastMatchingHistoryResponse,
-  PastMatchingCountResponse
+  PastMatchingCountResponse,
+  MatchStatusResponse,
 } from "../types/matching";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -15,7 +16,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 // MatchingMode normal => 컷 70 , relexed => 컷 60
 
 export async function fetchMatchingResult(
-  mode: MatchingMode = "normal"
+  mode: MatchingMode = "normal",
 ): Promise<MatchingResponse> {
   // URL은 표준 Web API 객체이고 그 안에 있는 것이 URLSearchParams 라는 표준 객체이다
   // 쿼리스트링을 안전하게 다루기 위해 URLSearchParams 사용
@@ -86,6 +87,22 @@ export async function fetchPastMatchingCount(): Promise<PastMatchingCountRespons
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message ?? "과거 매칭 횟수 조회 실패");
+  }
+
+  return res.json();
+}
+
+/* 특정 유저와의 매칭 상태 조회 */
+export async function fetchMatchStatusWithUser(
+  opponentId: string,
+): Promise<MatchStatusResponse> {
+  const url = new URL(`${API_BASE_URL}/matching/${opponentId}/status`);
+  const res = await fetchWithAuth(url.toString(), {
+    method: "GET",
+  });
+
+  if (!res.ok) {
+    throw new Error("매칭 상태 조회 실패");
   }
 
   return res.json();

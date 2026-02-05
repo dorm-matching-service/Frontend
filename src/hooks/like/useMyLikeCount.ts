@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyLikeCount } from "@/apis/like";
+import { getMyLikeCount } from "@src/apis/like";
 
 export function useMyLikeCount() {
   const [count, setCount] = useState<number>(0);
