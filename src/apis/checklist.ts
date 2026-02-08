@@ -1,7 +1,7 @@
 // src/apis/checklist.ts
 import { fetchWithAuth } from "lib/fetchWithAuth";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL } from "@src/config/env";
 
 import { LifestyleSurvey } from "@src/types/LifestyleSurvey";
 

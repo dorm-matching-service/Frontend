@@ -11,7 +11,7 @@ import type {
   RoommateRequestActionResponse
 } from "../types/matching";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL } from "@src/config/env";
 
 // relaxed를 옵셔널 파라매터 mode에 넣은 이유는
 //매칭 결과가 없을 때 뜨는 페이지에서 재 매칭을 눌렀을 때 기존 컷 70 에서 60으로 내려서 재매칭하기 위함

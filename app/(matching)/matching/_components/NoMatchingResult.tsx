@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import Button from "@/components/ui/Button";
+import Button from "@src/components/ui/Button";
 
 interface NoMatchingResultProps {
   onRelaxedRematch: () => void;
