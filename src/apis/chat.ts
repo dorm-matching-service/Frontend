@@ -2,7 +2,6 @@ import { fetchWithAuth } from "lib/fetchWithAuth";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-
 /* =========================
    채팅방 생성
 ========================= */
@@ -13,6 +12,9 @@ export async function createChatRoom(
     `${API_BASE_URL}/chat/rooms`,
     {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ opponentId }),
     },
   );
@@ -62,9 +64,12 @@ export async function sendChatMessage({
   content: string;
 }) {
   const res = await fetchWithAuth(
-    `${API_BASE_URL}/chat/messages`,
+    `${API_BASE_URL}/chat/messages/${roomId}`,
     {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ roomId, content }),
     },
   );
@@ -92,6 +97,9 @@ export async function readChatRoom({
     `${API_BASE_URL}/chat/rooms/${roomId}/read`,
     {
       method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ lastMessageId }),
     },
   );

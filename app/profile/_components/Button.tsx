@@ -33,16 +33,19 @@ export default function ActionButton({
   canRequest,
   hasChatRoom,
 });
-  // 1️. 이미 매칭됨 → 채팅
+  
+  // 매칭 완료
   if (matchStatus === "MATCHED") {
-    return hasChatRoom ? (
-      <button
-        onClick={onGoChat}
-        className={`${buttonClass.base} ${buttonClass.normal} ${buttonClass.hover}`}
-      >
-        채팅으로 이동
+    return (
+      <button disabled className={`${buttonClass.base} ${buttonClass.normal}`}>
+        매칭 완료
       </button>
-    ) : (
+    );
+  }
+
+  // 채팅방 X + 요청 가능 → 채팅하기
+  if (!hasChatRoom && canRequest) {
+    return (
       <button
         onClick={onStartChat}
         className={`${buttonClass.base} ${buttonClass.normal} ${buttonClass.hover}`}
@@ -52,16 +55,19 @@ export default function ActionButton({
     );
   }
 
-  // 2. 요청 받은 상태 (상세페이지에서는 표시만)
-  if (canRespond) {
+  // 채팅방 O + 요청 가능 → 룸메 요청
+  if (hasChatRoom && canRequest) {
     return (
-      <button disabled className={`${buttonClass.base} ${buttonClass.normal}`}>
-        요청 받음
+      <button
+        onClick={onRequestMatch}
+        className={`${buttonClass.base} ${buttonClass.normal} ${buttonClass.hover}`}
+      >
+        룸메 요청
       </button>
     );
   }
 
-  // 3. 요청 보낸 상태
+  // 요청 보낸 상태
   if (hasRequested) {
     return (
       <button disabled className={`${buttonClass.base} ${buttonClass.normal}`}>
@@ -70,17 +76,6 @@ export default function ActionButton({
     );
   }
 
-  // 4️. 아무 관계 없음
-  if (canRequest) {
-    return (
-      <button
-        onClick={onRequestMatch}
-        className={`${buttonClass.base} ${buttonClass.normal} ${buttonClass.hover}`}
-      >
-        매칭 요청
-      </button>
-    );
-  }
 
   return null;
 }

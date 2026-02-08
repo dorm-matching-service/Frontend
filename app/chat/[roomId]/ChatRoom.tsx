@@ -4,7 +4,9 @@ import { useChatMessages } from "@src/hooks/chat/useChatMessages";
 import { useSendChatMessage } from "@src/hooks/chat/useSendChatMessage";
 import { useReadChatRoom } from "@src/hooks/chat/useReadChatRoom";
 import { useEffect, useState } from "react";
-import { getSocket } from "../../../../lib/socket";
+import { getSocket } from "lib/socket";
+import type { Socket } from "socket.io-client";
+import { useMyProfile } from "@src/hooks/user/useMe";
 
 import { ChatMessage, MessageReadEvent } from "@src/types/chat";
 
@@ -15,9 +17,10 @@ interface Props {
 export default function ChatRoom({ roomId }: Props) {
   const { messages, setMessages, loading } = useChatMessages(roomId);
   const { read } = useReadChatRoom();
-
+  const { data: me, isLoading, error } = useMyProfile();
+  const myUserId = me?.id;
   const [input, setInput] = useState("");
-  const myUserId = "me";
+ 
 
   const { send, sending } = useSendChatMessage();
 
@@ -31,8 +34,9 @@ export default function ChatRoom({ roomId }: Props) {
       console.error("메시지 전송 실패", e);
     }
   };
-
-  //  초기 로딩 완료 후 마지막 메시지까지 읽음 처리
+  /* ===============================
+   * 초기 메시지 로딩 후 읽음 처리
+   * =============================== */
   useEffect(() => {
     if (!messages.length) return;
 
@@ -40,42 +44,55 @@ export default function ChatRoom({ roomId }: Props) {
     read(roomId, lastMessageId);
   }, [messages, roomId, read]);
 
-  //socket 실시간 처리
+  /* ===============================
+   * Socket.IO 실시간 처리
+   * =============================== */
   useEffect(() => {
     const socket = getSocket();
+    if (!socket) return; // 토큰 없음 등 예외 케이스
+
+    /* --- 연결 완료 후 방 입장 --- */
+    const handleConnect = () => {
+      console.log("✅ socket connected:", socket.id);
+      socket.emit("join_room", roomId);
+    };
+
+    const handleDisconnect = (reason: Socket.DisconnectReason) => {
+      console.log("❌ socket disconnected:", reason);
+    };
+
+    const handleConnectError = (err: Error) => {
+      console.error("❌ socket connect_error:", err.message);
+    };
 
     const handleReceiveMessage = (message: ChatMessage) => {
-      // [유지/개선] 정렬 포함해서 상태 반영
-      setMessages((prev) =>
-        [...prev, message].sort(
-          (a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-        ),
-      );
-
+      setMessages((prev) => [...prev, message]);
       read(roomId, message.id);
     };
 
     const handleMessageRead = (data: MessageReadEvent) => {
+      if (data.userId === myUserId) return;
       console.log("상대가 읽음:", data);
     };
 
-    const handleConnectError = (err: Error) => {
-      console.error("socket error:", err.message);
-    };
-
-    socket.emit("join_room", roomId);
+    /* --- 이벤트 바인딩 --- */
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
+    socket.on("connect_error", handleConnectError);
 
     socket.on("receive_message", handleReceiveMessage);
     socket.on("message_read", handleMessageRead);
-    socket.on("connect_error", handleConnectError);
 
     return () => {
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
+      socket.off("connect_error", handleConnectError);
+
       socket.off("receive_message", handleReceiveMessage);
       socket.off("message_read", handleMessageRead);
-      socket.off("connect_error", handleConnectError);
     };
-  }, [roomId, setMessages, read]);
+  }, [roomId, myUserId,  setMessages, read]);
+
   if (loading) return <div>로딩 중...</div>;
   return (
     <div className="flex flex-col h-full">
