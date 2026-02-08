@@ -13,7 +13,7 @@ export default function useCreateChatRoom(opponentId: string) {
     const { roomId } = await createChatRoom(opponentId);
 
     //채팅방으로 이동
-    router.push(`/chats/${roomId}`);
+    router.push(`/chat/${roomId}`);
   };
 
   return {
