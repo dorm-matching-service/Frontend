@@ -7,6 +7,8 @@ import type {
   PastMatchingHistoryResponse,
   PastMatchingCountResponse,
   MatchStatusResponse,
+  ReceivedRoommateRequestsResponse,
+  RoommateRequestActionResponse
 } from "../types/matching";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -103,6 +105,63 @@ export async function fetchMatchStatusWithUser(
 
   if (!res.ok) {
     throw new Error("매칭 상태 조회 실패");
+  }
+
+  return res.json();
+}
+
+
+/* ===== 내가 받은 룸메 요청 목록 조회 ===== */
+export async function fetchReceivedRoommateRequests(): Promise<ReceivedRoommateRequestsResponse> {
+  const url = new URL(`${API_BASE_URL}/matching/received`);
+
+  const res = await fetchWithAuth(url.toString(), {
+    method: "GET",
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message ?? "룸메 요청 목록 조회 실패");
+  }
+
+  return res.json();
+}
+
+/* ===== 룸메 요청 수락 ===== */
+export async function acceptRoommateRequest(
+  matchId: string,
+): Promise<RoommateRequestActionResponse> {
+  const url = new URL(
+    `${API_BASE_URL}/matching/${matchId}/accept`,
+  );
+
+  const res = await fetchWithAuth(url.toString(), {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message ?? "룸메 요청 수락 실패");
+  }
+
+  return res.json();
+}
+
+/* ===== 룸메 요청 거절 ===== */
+export async function rejectRoommateRequest(
+  matchId: string,
+): Promise<RoommateRequestActionResponse> {
+  const url = new URL(
+    `${API_BASE_URL}/matching/${matchId}/reject`,
+  );
+
+  const res = await fetchWithAuth(url.toString(), {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message ?? "룸메 요청 거절 실패");
   }
 
   return res.json();

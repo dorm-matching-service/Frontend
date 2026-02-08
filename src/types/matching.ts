@@ -54,3 +54,25 @@ export interface MatchStatusResponse {
   hasChatRoom: boolean; 
   chatRoomId: string | null;
 }
+
+
+/* ===== 받은 룸메 요청 목록 ===== */
+export interface ReceivedRoommateRequestsResponse {
+  count: number;
+  requests: {
+    matchId: string;
+    createdAt: string;
+    requester: {
+      userId: string;
+      age: number | null;
+      department: string;
+      tags: string[];
+    };
+  }[];
+}
+
+/* ===== 수락 / 거절 공통 응답 ===== */
+export interface RoommateRequestActionResponse {
+  success: boolean;
+  message: string;
+}
