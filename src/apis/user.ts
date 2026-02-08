@@ -1,7 +1,7 @@
 // src/apis/user.ts
 import { fetchWithAuth } from "lib/fetchWithAuth";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL } from "@src/config/env";
 
 export async function updatePrivacyConsent(version: number) {
   const res = await fetchWithAuth(`${API_BASE_URL}/users/consent/privacy`, {

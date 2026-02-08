@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { useMe } from "@src/hooks/user/useMe";
+import { useFetchMe } from "@src/hooks/user/useFetchMe";
 import { usePrivacyConsent } from "@src/hooks/auth/usePrivacyConsent";
 
 import AuthBox from "../../../_components/AuthBox";
@@ -18,7 +18,7 @@ import AgreementModal from "./_components/AgreementModal";
 export default function ConsentPage() {
   const router = useRouter();
 
-  const { user, loading } = useMe();
+  const { user, loading } = useFetchMe();
   const { submitConsent } = usePrivacyConsent();
 
   //개인정보 동의 한 사람인지 페이지 렌더링 시 바로 거르는 가드 로직

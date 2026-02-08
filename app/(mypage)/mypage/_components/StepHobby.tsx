@@ -1,5 +1,5 @@
 import CircleOption from "./CircleOption";
-import type { LifestyleSurvey, GamingTime } from "@/types/LifestyleSurvey";
+import type { LifestyleSurvey, GamingTime } from "@src/types/LifestyleSurvey";
 
 type Props = {
   formState: Partial<LifestyleSurvey>;
