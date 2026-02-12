@@ -20,11 +20,11 @@ export default function ChatRoom({ roomId }: Props) {
   const { data: me, isLoading, error } = useMyProfile();
   const myUserId = me?.id;
   const [input, setInput] = useState("");
- 
 
   const { send, sending } = useSendChatMessage();
 
   const sendMessage = async () => {
+   
     if (!input.trim() || sending) return;
 
     try {
@@ -91,7 +91,9 @@ export default function ChatRoom({ roomId }: Props) {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("message_read", handleMessageRead);
     };
-  }, [roomId, myUserId,  setMessages, read]);
+  }, [roomId, myUserId, setMessages, read]);
+
+ 
 
   if (loading) return <div>로딩 중...</div>;
   return (

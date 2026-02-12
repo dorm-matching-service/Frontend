@@ -1,4 +1,3 @@
-// app/chat/[roomId]/page.tsx
 import ChatRoom from "./ChatRoom";
 
 export default async function Page({
