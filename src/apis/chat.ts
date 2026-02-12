@@ -112,3 +112,24 @@ export async function readChatRoom({
 
   return data;
 }
+
+
+/* =========================
+   내가 속한 채팅방 목록 조회
+========================= */
+export async function fetchMyChatRooms() {
+  const res = await fetchWithAuth(
+    `${API_BASE_URL}/chat/rooms`,
+    {
+      method: "GET",
+    },
+  );
+
+  const data = await res.json();
+
+  if (!res.ok || !data?.rooms) {
+    throw new Error(data?.message || "채팅방 목록 조회 실패");
+  }
+
+  return data;
+}

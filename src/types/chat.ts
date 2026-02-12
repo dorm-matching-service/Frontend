@@ -12,3 +12,27 @@ export interface MessageReadEvent {
   userId: string;
   messageId: string;
 }
+
+export interface ChatRoomListItem {
+  roomId: string;
+
+  opponent: {
+    id: string;
+    email: string;
+    age: number | null;
+    department: string | null;
+  };
+
+  lastMessage: {
+    id: string;
+    content: string;
+    createdAt: string;
+  } | null;
+
+  unreadCount: number;
+}
+
+export interface ChatRoomListResponse {
+  count: number;
+  rooms: ChatRoomListItem[];
+}
