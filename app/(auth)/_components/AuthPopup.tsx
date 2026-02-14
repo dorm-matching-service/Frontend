@@ -27,8 +27,10 @@ export default function AuthPopup({ message, onClose }: AuthPopupProps) {
         </div>
 
         {/* 버튼 (하단 고정) */}
-        <div className="p-6 border-t">
-          <Button onClick={onClose}>닫기</Button>
+        <div className="p-6 border-t flex justify-center">
+          <Button onClick={onClose}
+           className="min-w-0 w-[300px] h-[44px] text-16"
+          >닫기</Button>
         </div>
 
       </div>

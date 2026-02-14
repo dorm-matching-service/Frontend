@@ -1,6 +1,12 @@
-export default function Footer() {
+
+
+interface FooterProps {
+  className?: string;
+}
+
+export default function Footer({ className = "" }: FooterProps) {
     return (
-        <footer className=" w-full bg-gray-100">
+        <footer className={`w-full bg-gray-100 ${className}`}>
             <div className="mx-auto max-w-[1280px] px-10 py-10 text-center text-gray-900">
                 <div className="mb-4 flex justify-center">
                     <img src="/knockblack.svg" alt="Knock 로고" className="h-5 w-auto" />

@@ -10,23 +10,28 @@ export default function Header() {
           <Link href="/" className="flex gap-2 mr-20">
             <img src="/Knock.svg" alt="Knock 로고" className="h-6 w-auto" />
           </Link>
-
-          <nav className="flex gap-14 text-20 text-[#5F5F5F]">
-            <button className="hover:text-[#1B1B1B]">노크란?</button>
-            <button className="hover:text-[#1B1B1B]">FAQ</button>
-            <button className="hover:text-[#1B1B1B]">공지사항</button>
-          </nav>
         </div>
 
         <div className="flex items-center gap-6 text-m text-[#1B1B1B]">
-          <button className="flex items-center gap-1 hover:text-emerald-500">
+          
+          {/* 채팅 */}
+          <Link
+            href="/chat"
+            className="flex items-center gap-1 hover:text-emerald-500"
+          >
             <img src="/messageicon.svg" alt="채팅 아이콘" className="h-6 w-6" />
             <span className="text-20">채팅</span>
-          </button>
-          <button className="flex items-center gap-1 hover:text-emerald-500">
+          </Link>
+
+          {/* 마이페이지 */}
+          <Link
+            href="/mypage"
+            className="flex items-center gap-1 hover:text-emerald-500"
+          >
             <img src="/user.svg" alt="마이 아이콘" className="h-6 w-6" />
             <span className="text-20">마이</span>
-          </button>
+          </Link>
+
         </div>
       </div>
     </header>
