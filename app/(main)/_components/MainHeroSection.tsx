@@ -24,7 +24,7 @@ export default function MainHeroSection() {
       <p className="text-40 text-gray-900 font-bold">
         룸메이트 매칭 서비스 Knock
       </p>
-      <Button variant="primary" className="mt-16" onClick={handleClick}>
+      <Button variant="primary" className="mt-16 w-[300px] h-[60px]" onClick={handleClick}>
         룸메 매칭 시작하기
       </Button>
     </div>

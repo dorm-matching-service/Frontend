@@ -6,24 +6,26 @@ import Footer from "@src/components/ui/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter", 
+  variable: "--font-inter",
 });
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className={inter.className}
-      >
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Providers>
-          
           <Header />
-          {children}
+
+          <main className="flex-1">
+            {children}
+          </main>
+
           <Footer />
-          </Providers>
+        </Providers>
       </body>
     </html>
   );

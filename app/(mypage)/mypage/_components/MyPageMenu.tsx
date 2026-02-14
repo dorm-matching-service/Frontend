@@ -32,17 +32,13 @@ export default function MyPageMenu() {
         <p onClick={() => go(MY_PAGE_ROUTES.HISTORY)} className="text-16 text-gray-700">
           지난 매칭 기록
         </p>
-        <p onClick={() => go(MY_PAGE_ROUTES.CHAT)} className="text-16 text-gray-700">
-          채팅
-        </p>
+      
       </section>
 
       <section className="space-y-2">
         <h3 className="text-18 text-gray-900 font-bold">나의 정보</h3>
 
-        <p onClick={() => go(MY_PAGE_ROUTES.ACCOUNT)} className="text-16 text-gray-700">
-          계정 관리
-        </p>
+      
         <p onClick={() => go(MY_PAGE_ROUTES.CHECKLIST)} className="text-16 text-gray-700">
           체크리스트 수정
         </p>

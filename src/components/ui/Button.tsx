@@ -12,11 +12,10 @@ interface ButtonProps {
 const variantStyles: Record<string, string> = {
   primary: `
     flex items-center justify-center text-18
-    w-full
+   
     font-bold
     bg-main text-white
     active:scale-95
-
   `,
   auth: `
     bg-gray-300 text-white
@@ -26,7 +25,6 @@ const variantStyles: Record<string, string> = {
     disabled:opacity-40 
     disabled:hover:bg-gray-300
     text-16
-    w-full 
     h-[55px]
   `,
   secondary: `
