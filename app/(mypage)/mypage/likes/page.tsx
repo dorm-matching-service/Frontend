@@ -24,7 +24,7 @@ export default function LikesPage() {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <ul className="flex gap-6">
+      <ul className="grid grid-cols-3 gap-6 items-stretch">
         {cards.map((card) => (
           <li key={card.userId}>
             <MyPageProfileCard

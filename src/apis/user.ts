@@ -20,7 +20,6 @@ export async function updatePrivacyConsent(version: number) {
   return res.json(); // { message, user }
 }
 
-
 /* 로그인 유저 정보 조회 (me) */
 export async function fetchMe() {
   try {
@@ -29,7 +28,7 @@ export async function fetchMe() {
     if (!res.ok) return null;
 
     const data = await res.json();
-
+    console.log("🔥 /users/me 실제 응답:", data);
     // 백엔드에서 { email } 형태로 내려주므로 그대로 반환
     return data ?? null;
   } catch {

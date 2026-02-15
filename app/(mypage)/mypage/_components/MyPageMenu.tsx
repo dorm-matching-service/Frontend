@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 const MY_PAGE_ROUTES = {
-  REQUESTS: "/mypage/requests",
+  REQUESTS: "/mypage/roommate-requests",
   LIKED: "/mypage/likes",
   HISTORY: "/mypage/history",
   CHAT: "/chat",
@@ -19,7 +19,7 @@ export default function MyPageMenu() {
   };
 
   return (
-    <div className="flex flex-col w-full border shadow-profileCard rounded-[15px] p-6 space-y-6">
+    <div className="flex flex-col w-[320px] border shadow-profileCard rounded-[15px] p-6 space-y-6">
       <section className="space-y-2">
         <h3 className="text-18 text-gray-900 font-bold">내 활동</h3>
 

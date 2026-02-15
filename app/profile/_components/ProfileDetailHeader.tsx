@@ -9,14 +9,12 @@ interface ProfileDetailHeaderProps {
 
   isLiked: boolean;
 
-  // 매칭/채팅 상태
   matchStatus: "PENDING" | "MATCHED" | "REJECTED" | null;
   hasRequested: boolean;
   canRespond: boolean;
   canRequest: boolean;
   hasChatRoom: boolean;
 
-  // 액션
   onRequestMatch: () => void;
   onStartChat: () => void;
   onGoChat: () => void;
@@ -26,6 +24,7 @@ export default function ProfileDetailHeader({
   department,
   age,
   tags,
+  isLiked,
 
   matchStatus,
   hasRequested,
@@ -39,24 +38,37 @@ export default function ProfileDetailHeader({
 }: ProfileDetailHeaderProps) {
   return (
     <ProfileDetailBox>
-      <p>
-        {department} {age}살
-      </p>
+      {/* 상단: 이름 + 좋아요 */}
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between">
+          <p className="text-lg font-semibold ">
+            {department} {age}살
+          </p>
 
-      <div>
-        <TagList tags={tags} />
+          {/* 좋아요 버튼 */}
+          <img
+            src={isLiked ? "/redlike.svg" : "/emptylike.svg"}
+            alt="찜 아이콘"
+            className="w-[18px] h-[16px]"
+          />
+        </div>
+
+        <div className="w-full">
+          <div className="mt-2 flex justify-between">
+            <TagList tags={tags} />
+            <ActionButton
+              matchStatus={matchStatus}
+              hasRequested={hasRequested}
+              canRespond={canRespond}
+              canRequest={canRequest}
+              hasChatRoom={hasChatRoom}
+              onRequestMatch={onRequestMatch}
+              onStartChat={onStartChat}
+              onGoChat={onGoChat}
+            />
+          </div>
+        </div>
       </div>
-
-      <ActionButton
-        matchStatus={matchStatus}
-        hasRequested={hasRequested}
-        canRespond={canRespond}
-        canRequest={canRequest}
-        hasChatRoom={hasChatRoom}
-        onRequestMatch={onRequestMatch}
-        onStartChat={onStartChat}
-        onGoChat={onGoChat}
-      />
     </ProfileDetailBox>
   );
 }

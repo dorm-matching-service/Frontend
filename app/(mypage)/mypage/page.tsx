@@ -32,7 +32,7 @@ export default function MyPage() {
   
 
   return (
-    <div className="min-h-screen flex flex-col gap-8">
+    <div className="flex max-w-[1100px] mx-auto flex-col gap-8">
       <SummaryCardSection
         counts={{
           requestCount: likedCards.length,

@@ -24,18 +24,16 @@ export default function ChatRoomList({ selectedRoomId }: Props) {
             key={room.roomId}
             onClick={() => router.push(`/chat/${room.roomId}`)}
             className={`p-4 cursor-pointer transition ${
-              isSelected
-                ? "bg-main text-white"
-                : "hover:bg-gray-100"
+              isSelected ? "bg-main text-white" : "hover:bg-gray-100"
             }`}
           >
             <div className="flex justify-between">
               <span className="font-semibold">
                 {room.opponent.department} {room.opponent.age}살
               </span>
-              <span className="text-xs">
+              {/* <span className="text-xs">
                 {room.lastMessage?.createdAt?.slice(5, 16)}
-              </span>
+              </span> */}
             </div>
 
             <p className="text-sm truncate">

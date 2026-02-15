@@ -6,7 +6,7 @@ interface MypageLayoutProps {
 
 export default function MypageLayout({ children }: MypageLayoutProps) {
   return (
-    <div className="flex min-h-screen items-stretch">
+    <div className="flex min-h-screen items-center">
       <aside className="w-[320px] shrink-0 p-6 h-full">
         <MyPageSidebar />
       </aside>
