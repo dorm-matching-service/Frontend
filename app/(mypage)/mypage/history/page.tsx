@@ -23,7 +23,7 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <ul className="flex gap-6">
+      <ul className="flex gap-6 flex-wrap">
         {cards.map((card) => (
           <li key={card.userId}>
             <MyPageProfileCard

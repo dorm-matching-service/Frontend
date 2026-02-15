@@ -1,8 +1,9 @@
 import MyPageProfileCard from "./MyPageProfileCard";
 import { LikedProfileCard } from "@src/types/like";
+import Link from "next/link";
 
 interface InterestedProfileSectionProps {
- profiles: LikedProfileCard[]; 
+  profiles: LikedProfileCard[];
   onLikeChange: (userId: string, liked: boolean) => void;
 }
 
@@ -16,10 +17,19 @@ export default function InterestedProfileSection({
         <section className="flex">
           <h2>
             관심 프로필
-            <span className="font-bold text-18 text-main"> {profiles.length}</span>
+            <span className="font-bold text-18 text-main">
+              {" "}
+              {profiles.length}
+            </span>
           </h2>
         </section>
-        <p>관심 프로필 모두 보기 &gt;</p>
+        <Link
+          href="/mypage/likes"
+          className="text-gray-800 hover:text-main transition"
+        >
+          {" "}
+          <p className="text-gray-800">관심 프로필 모두 보기 &gt;</p>
+        </Link>
       </div>
       <ul className="flex gap-6">
         {profiles.slice(0, 3).map((card) => (

@@ -24,7 +24,6 @@ export default function ChatRoom({ roomId }: Props) {
   const { send, sending } = useSendChatMessage();
 
   const sendMessage = async () => {
-   
     if (!input.trim() || sending) return;
 
     try {
@@ -43,6 +42,10 @@ export default function ChatRoom({ roomId }: Props) {
     const lastMessageId = messages[messages.length - 1].id;
     read(roomId, lastMessageId);
   }, [messages, roomId, read]);
+
+  useEffect(() => {
+    console.log("🔵 me 전체:", me);
+  }, [me]);
 
   /* ===============================
    * Socket.IO 실시간 처리
@@ -82,6 +85,7 @@ export default function ChatRoom({ roomId }: Props) {
 
     socket.on("receive_message", handleReceiveMessage);
     socket.on("message_read", handleMessageRead);
+    console.log("🔵 myUserId (me.id):", myUserId);
 
     return () => {
       socket.off("connect", handleConnect);
@@ -93,9 +97,8 @@ export default function ChatRoom({ roomId }: Props) {
     };
   }, [roomId, myUserId, setMessages, read]);
 
- 
-
-  if (loading) return <div>로딩 중...</div>;
+  if (loading || isLoading) return <div>로딩 중...</div>;
+  if (!me) return <div>유저 정보 없음</div>;
   return (
     <div className="flex flex-col h-full">
       {/* ===============================
@@ -105,6 +108,7 @@ export default function ChatRoom({ roomId }: Props) {
         {messages.map((m) => {
           //  내 / 상대 메시지 구분
           const isMine = m.sender_id === myUserId;
+          console.log("🟡 message sender_id:", m.sender_id);
 
           return (
             <div

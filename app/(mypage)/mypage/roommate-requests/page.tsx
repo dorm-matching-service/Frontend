@@ -11,11 +11,11 @@ export default function RoommateRequestsPage() {
     reject,
   } = useReceivedRoommateRequests();
 
-  if (loading) return <div>로딩 중...</div>;
+  if (loading) return <div className="pl-72">로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
   if (requests.length === 0) {
-    return <div>받은 룸메 요청이 없습니다.</div>;
+    return <div className="pl-72">받은 룸메 요청이 없습니다.</div>;
   }
 
   return (

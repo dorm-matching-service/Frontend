@@ -21,7 +21,7 @@ export default function MyPageSidebar() {
   }
 
   return (
-    <div className="flex flex-col space-y-6 h-full">
+    <div className="flex flex-col gap-6 h-full">
       {summary?.survey && (
         <MyProfileCard
           data={{
@@ -31,6 +31,7 @@ export default function MyPageSidebar() {
             sleepTime: summary.survey.sleepTime ?? "",
             tags: summary.survey.tags ?? [],
           }}
+
         />
       )}
 

@@ -11,9 +11,11 @@ export default function ProfileBox({
 }: ProfileBoxProps) {
   return (
     <div
-      className={`w-full shadow-profileCard rounded-[15px] overflow-hidden ${className}`}
+      className={`    w-[320px]
+    h-[260px]
+    shrink-0 shadow-profileCard rounded-[15px] overflow-hidden  ${className}`}
     >
-      <div className="flex flex-col gap-5 px-6 py-6 justify-center">
+      <div className="flex flex-col gap-5 px-6 py-6 justify-between h-full ">
         {children}
       </div>
     </div>
